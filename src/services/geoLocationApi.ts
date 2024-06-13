@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Coordinates, LocationResponse } from "../types/weather";
+import { Coordinates, LocationResponse } from "../types/weatherType";
 
 const geoLocationApi = createApi({
     reducerPath: 'locationApi',

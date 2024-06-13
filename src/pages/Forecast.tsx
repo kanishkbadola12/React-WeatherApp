@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useAppDispatch } from "../hooks/redux";
 import { setCoordinates } from "../store/coordinatesSlice";
-import DailyForeCastSummary from "../components/daily-forecast/DailyForecastSummary";
+import DailyForecastSummary from "../components/daily-forecast/DailyForecastSummary";
+import DailyForecastHourly from "../components/daily-forecast/DailyForecastHourly";
+import { Container } from "@mui/material";
 
 const Forecast: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -11,7 +13,7 @@ const Forecast: React.FC = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          dispatch(setCoordinates({latitude, longitude}));
+          dispatch(setCoordinates({ latitude, longitude }));
         },
         (error) => {
           //error
@@ -23,9 +25,12 @@ const Forecast: React.FC = () => {
   }, [dispatch]);
 
 
-  return <>
-    <DailyForeCastSummary />
-  </>
+  return (
+    <Container sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <DailyForecastHourly />
+      <DailyForecastSummary />
+    </Container>
+  )
 };
 
 export default Forecast;

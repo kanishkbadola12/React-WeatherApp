@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Coordinates } from "../types/weather";
+import { Coordinates } from "../types/weatherType";
 
 const initialState: Coordinates = {
     latitude: null,

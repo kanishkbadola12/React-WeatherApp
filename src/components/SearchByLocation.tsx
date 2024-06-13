@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
-import { Button, TextField } from "@mui/material";
+import { Container, InputAdornment, TextField } from "@mui/material";
 import { useLazyGetCoordinatesQuery } from '../services/coordinatesApi';
 import { useAppDispatch } from '../hooks/redux';
 import { setCoordinates } from '../store/coordinatesSlice';
+import SearchIcon from '@mui/icons-material/Search';
 
 export const SearchByLocation: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -20,15 +21,33 @@ export const SearchByLocation: React.FC = () => {
     };
 
     return (
-        <>
+        <Container sx={{
+            display: "flex",
+            justifyContent: "end",
+            '& .MuiInputBase-root': {
+                height: "36px",
+                borderRadius: "24px"
+            },
+            '& label': {
+                fontSize: "small",
+                color: "#212529"
+            },
+            '& svg': {
+                cursor: "pointer"
+            }
+        }}>
             <TextField
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <SearchIcon onClick={handleLocationSearch} />
+                        </InputAdornment>
+                    )
+                }}
                 id="outlined-multiline-flexible"
                 label="Search for places..."
                 inputRef={inputRef}
             />
-            <Button onClick={handleLocationSearch} variant="contained">
-                Send
-            </Button>
-        </>
+        </Container>
     )
 }

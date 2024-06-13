@@ -1,4 +1,4 @@
-import { CurrentWeather } from "./weather";
+import { CurrentWeather } from "./weatherType";
 
 type Camelize<T extends string> = T extends `${infer A}_${infer B}` ? `${A}${Camelize<Capitalize<B>>}` : T;
 

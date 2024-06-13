@@ -5,6 +5,12 @@ export interface Coordinates {
 
 export interface LocationResponse {
     city: string;
+    countryCode: string
+}
+
+interface Hourly {
+    time: string[];
+    temperature_2m: number[];
 }
 
 export interface GeoLocationResponse {
@@ -13,9 +19,11 @@ export interface GeoLocationResponse {
 
 export interface WeatherResponse {
     current: CurrentWeather;
+    hourly: Hourly;
 }
 
 export interface CurrentWeather {
+    date: string;
     time: string;
     interval: number;
     temperature_2m: number;
@@ -25,5 +33,7 @@ export interface CurrentWeather {
     rain: number;
     snowfall: number;
     wind_speed_10m: number;
+    hourly: string[];
+    hourlyTemperature: number[]
 }
 

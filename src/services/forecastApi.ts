@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Coordinates, WeatherResponse } from "../types/weather";
+import { Coordinates, WeatherResponse } from "../types/weatherType";
 import { TransfomedCurrentWeather } from "../types/types";
 
 const params = 'current=temperature_2m,relative_humidity_2m,cloud_cover,apparent_temperature,rain,snowfall,wind_speed_10m&hourly=temperature_2m';
@@ -11,17 +11,20 @@ const forecastApi = createApi({
         getForecast: builder.query<TransfomedCurrentWeather, Coordinates>({
             query: ({ latitude, longitude }) => `forecast?latitude=${latitude}&longitude=${longitude}&` + params,
             transformResponse: (response: WeatherResponse): TransfomedCurrentWeather => {
-                const { current } = response;
+                const { current, hourly } = response;
                 return {
-                    time: current.time,
+                    date: current.time.split('T')[0],
+                    time: current.time.split('T')[1],
                     interval: current.interval,
-                    temperature2m: current.temperature_2m,
+                    temperature2m: Math.round(current.temperature_2m),
                     relativeHumidity2m: current.relative_humidity_2m,
                     cloudCover: current.cloud_cover,
-                    apparentTemperature: current.apparent_temperature,
+                    apparentTemperature: Math.round(current.apparent_temperature),
                     rain: current.rain,
                     snowfall: current.snowfall,
                     windSpeed10m: current.wind_speed_10m,
+                    hourly: hourly.time,
+                    hourlyTemperature: hourly.temperature_2m
                 };
             }
         })
