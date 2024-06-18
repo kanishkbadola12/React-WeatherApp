@@ -1,53 +1,65 @@
-import React, { useRef } from 'react'
-import { Container, InputAdornment, TextField } from "@mui/material";
+import React, { useRef, useState } from 'react'
+import { Box, InputAdornment, Stack, Tab, Tabs, TextField, useTheme } from "@mui/material";
 import { useLazyGetCoordinatesQuery } from '../services/coordinatesApi';
 import { useAppDispatch } from '../hooks/redux';
 import { setCoordinates } from '../store/coordinatesSlice';
 import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from 'react-router-dom';
 
 export const SearchByLocation: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
-
+    const [tab, setTab] = useState('today');
     const [getCoordinates] = useLazyGetCoordinatesQuery();
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const theme = useTheme();
 
-    const handleLocationSearch = async (): Promise<void> => {
-        const response = await getCoordinates(inputRef.current!.value);
+    const handleTabState = () => {
+        tab === 'today' ? navigate('weekly') : navigate('..');
+        tab === 'today' ? setTab('week') : setTab('today');
+    }
 
-        if (response.data) {
-            const { latitude, longitude } = response.data;
-            dispatch(setCoordinates({ latitude, longitude }));
+    const handleLocationSearch = async (event: React.KeyboardEvent): Promise<void> => {
+        if (event.key === 'Enter') {
+            const response = await getCoordinates(inputRef.current!.value);
+
+            if (response.data) {
+                const { latitude, longitude } = response.data;
+                dispatch(setCoordinates({ latitude, longitude }));
+            }
         }
     };
 
     return (
-        <Container sx={{
-            display: "flex",
-            justifyContent: "end",
-            '& .MuiInputBase-root': {
-                height: "36px",
-                borderRadius: "24px"
-            },
-            '& label': {
-                fontSize: "small",
-                color: "#212529"
-            },
-            '& svg': {
-                cursor: "pointer"
-            }
-        }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="end">
+            <Box>
+                <Tabs value={tab} onChange={handleTabState}>
+                    <Tab
+                        sx={{ color: tab == 'today' ? theme.palette.primary.main : theme.palette.primary.light }}
+                        value="today"
+                        label="Today"
+                    />
+                    <Tab
+                        sx={{ color: tab == 'week' ? theme.palette.primary.main : theme.palette.primary.light }}
+                        value="week"
+                        label="Week"
+                    />
+                </Tabs>
+            </Box>
             <TextField
+                onKeyDown={handleLocationSearch}
                 InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <SearchIcon onClick={handleLocationSearch} />
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon />
                         </InputAdornment>
                     )
                 }}
-                id="outlined-multiline-flexible"
+                id="outlined-basic"
+                variant="outlined"
                 label="Search for places..."
                 inputRef={inputRef}
             />
-        </Container>
+        </Stack>
     )
 }

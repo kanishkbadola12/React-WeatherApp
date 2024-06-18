@@ -1,17 +1,23 @@
 import "./App.css";
-import Forecast from "./pages/Forecast";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/Root";
+import { WeeklyForecast } from "./components/weekly-forecast/WeeklyForecast";
+import Daily from "./pages/Daily";
+import Weekly from "./pages/Weekly";
 
 function App() {
   const router = createBrowserRouter([
     {
-      path: "/",
+      path: '/',
       element: <RootLayout />,
       children: [
         {
           index: true,
-          element: <Forecast />
+          element: <Daily />
+        },
+        {
+          path: '/weekly',
+          element: <Weekly />
         }
       ]
     },
