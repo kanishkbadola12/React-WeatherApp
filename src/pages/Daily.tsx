@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Stack } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
 import HourlyConditions from "../components/daily-forecast/HourlyConditions";
-import DailyForecastSummary from "../components/daily-forecast/Summary";
+import DailyForecastSummary from "../components/daily-forecast/DailySummary";
 import { useAppSelector } from "../hooks/redux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
@@ -25,13 +25,13 @@ const Daily: React.FC = () => {
     <Stack spacing={6}>
       <Stack direction="row" spacing={4}>
         <DailyForecast
-          temperature={weather.temperature2m}
+          currentTemperature={weather.currentTemperature}
           date={weather.date}
-          cloudCover={weather.cloudCover}
+          currentCloudCover={weather.currentCloudCover}
         />
         <HourlyConditions
-          time={weather.time}
-          hourly={weather.hourly}
+          currentTime={weather.currentTime}
+          hourlyTime={weather.hourlyTime}
           hourlyTemperature={weather.hourlyTemperature}
         />
       </Stack>
@@ -39,10 +39,10 @@ const Daily: React.FC = () => {
         city={geoLocation.city}
         countryCode={geoLocation.countryCode}
         rain={weather.rain}
-        windSpeed={weather.windSpeed10m}
-        feelsLike={weather.apparentTemperature}
-        humidity={weather.relativeHumidity2m}
-        time={weather.time}
+        windSpeed={weather.windSpeed}
+        feelsLike={weather.feelsLike}
+        humidity={weather.humidity}
+        currentTime={weather.currentTime}
       />
     </Stack>
   )

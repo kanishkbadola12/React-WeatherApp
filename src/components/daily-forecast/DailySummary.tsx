@@ -10,7 +10,7 @@ interface DailyForecastSummaryProps {
     feelsLike: number
     windSpeed: number
     humidity: number
-    time: string
+    currentTime: string
 }
 
 export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
@@ -20,7 +20,7 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
     feelsLike,
     windSpeed,
     humidity,
-    time
+    currentTime
 }) => {
     return (
         <Stack spacing={2}>
@@ -46,7 +46,7 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
             </Stack>
             <Stack direction="row" gap={1} justifyContent="end">
                 <AccessTimeOutlinedIcon />
-                <Typography color="primary">{time}</Typography>
+                <Typography color="primary">{currentTime}</Typography>
             </Stack>
         </Stack>
     )

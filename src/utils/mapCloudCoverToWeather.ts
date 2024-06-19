@@ -1,4 +1,4 @@
-export const mapCloudCoverToWeather = (cloudCover: number) => {
+export const mapCurrentCloudCoverToWeather = (cloudCover: number) => {
     switch (true) {
         case (cloudCover >= 0 && cloudCover <= 10):
             return 'Clear';
@@ -8,5 +8,7 @@ export const mapCloudCoverToWeather = (cloudCover: number) => {
             return 'Mostly Cloud';
         case (cloudCover >= 90 && cloudCover <= 100):
             return 'Overcast'
+        default:
+            return 'Not known'
     }
 }

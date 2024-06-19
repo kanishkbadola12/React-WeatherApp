@@ -4,12 +4,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { mapTimeToTemperature } from "../../utils/mapTimeToTemperature";
 
 interface HourlyConditionsProps {
-    time: string
-    hourly: string[]
+    currentTime: string
+    hourlyTime: string[]
     hourlyTemperature: number[],
 }
 
-const HourlyConditions: React.FC<HourlyConditionsProps> = ({ time, hourly, hourlyTemperature }) => {
+const HourlyConditions: React.FC<HourlyConditionsProps> = ({ currentTime, hourlyTime, hourlyTemperature }) => {
     const handleScrollLeft = () => {
         document.getElementById('weatherSlider')!.scrollLeft -= 300;
     }
@@ -31,13 +31,13 @@ const HourlyConditions: React.FC<HourlyConditionsProps> = ({ time, hourly, hourl
                 sx={{ overflowX: "hidden", width: "80vw", scrollBehavior: "smooth" }}
             >
                 {Object.entries(mapTimeToTemperature(
-                    time,
-                    hourly.slice(0, 24),
+                    currentTime,
+                    hourlyTime.slice(0, 24),
                     hourlyTemperature.slice(0, 24)
-                )).map((timeAndTemperature, idx) => (
+                )).map(([time, temperature], idx) => (
                     <Box key={idx} display="flex" flexDirection="column" alignItems="center" >
-                        <Typography color="primary">{timeAndTemperature[0]}</Typography>
-                        <Typography color="primary">{timeAndTemperature[1]}</Typography>
+                        <Typography color="primary">{time}</Typography>
+                        <Typography color="primary">{temperature}</Typography>
                     </Box>
                 ))}
             </Box>

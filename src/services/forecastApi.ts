@@ -1,30 +1,30 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Coordinates, WeatherResponse } from "../types/weatherType";
-import { TransfomedCurrentWeather } from "../types/types";
+import { Coordinates, WeatherResponse, TransformedWeather } from "../types/weatherType";
 
-const params = 'current=temperature_2m,relative_humidity_2m,cloud_cover,apparent_temperature,rain,snowfall,wind_speed_10m&hourly=temperature_2m&timezone=auto';
+const params = 'current=temperature_2m,relative_humidity_2m,cloud_cover,apparent_temperature,rain,snowfall,wind_speed_10m&hourly=temperature_2m,cloud_cover&timezone=auto';
 
 const forecastApi = createApi({
     reducerPath: 'weatherApi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://api.open-meteo.com/v1/' }),
     endpoints: (builder) => ({
-        getForecast: builder.query<TransfomedCurrentWeather, Coordinates>({
+        getForecast: builder.query<TransformedWeather, Coordinates>({
             query: ({ latitude, longitude }) => `forecast?latitude=${latitude}&longitude=${longitude}&` + params,
-            transformResponse: (response: WeatherResponse): TransfomedCurrentWeather => {
+            transformResponse: (response: WeatherResponse): TransformedWeather => {
                 const { current, hourly } = response;
+
                 return {
                     date: current.time.split('T')[0],
-                    time: current.time.split('T')[1],
-                    interval: current.interval,
-                    temperature2m: Math.round(current.temperature_2m),
-                    relativeHumidity2m: current.relative_humidity_2m,
-                    cloudCover: current.cloud_cover,
-                    apparentTemperature: Math.round(current.apparent_temperature),
+                    currentTime: current.time.split('T')[1],
+                    currentTemperature: Math.round(current.temperature_2m),
+                    currentCloudCover: current.cloud_cover,
+                    humidity: current.relative_humidity_2m,
+                    feelsLike: Math.round(current.apparent_temperature),
                     rain: current.rain,
                     snowfall: current.snowfall,
-                    windSpeed10m: Math.round(current.wind_speed_10m),
-                    hourly: hourly.time,
-                    hourlyTemperature: hourly.temperature_2m
+                    windSpeed: Math.round(current.wind_speed_10m),
+                    hourlyCloudCover: hourly.cloud_cover,
+                    hourlyTemperature: hourly.temperature_2m,
+                    hourlyTime: hourly.time,
                 };
             }
         })

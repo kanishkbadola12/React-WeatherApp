@@ -1,21 +1,21 @@
 import React from "react";
 import { Stack, Typography } from "@mui/material";
 import { formatDate } from "../../utils/formatDate";
-import { mapCloudCoverToWeather } from "../../utils/mapCloudCoverToWeather";
+import { mapCurrentCloudCoverToWeather } from "../../utils/mapCloudCoverToWeather";
 import WbSunnyIcon from '@mui/icons-material/WbSunnyOutlined';
 
 interface DailyForecastProps {
-    temperature: number
+    currentTemperature: number
     date: string
-    cloudCover: number,
+    currentCloudCover: number
 }
 
-export const DailyForecast: React.FC<DailyForecastProps> = ({ temperature, date, cloudCover }) => {
+export const DailyForecast: React.FC<DailyForecastProps> = ({ currentTemperature, date, currentCloudCover }) => {
     return (
         <Stack direction="row" spacing={4}>
             <Stack direction="row" spacing={4}>
                 <Stack alignItems="center">
-                    <Typography color="primary" variant="h2">{temperature}</Typography>
+                    <Typography color="primary" variant="h2">{currentTemperature}</Typography>
                     <Stack direction="row" spacing={0.5}>
                         {Object.values(formatDate(date)).map((date, idx) => (
                             <Typography key={idx}>
@@ -26,7 +26,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ temperature, date,
                 </Stack>
                 <Stack spacing={1} alignItems="center" justifyContent="end">
                     <WbSunnyIcon color="primary" sx={{ fontSize: "3.5rem" }} />
-                    <Typography color="primary" >{mapCloudCoverToWeather(cloudCover)}</Typography>
+                    <Typography color="primary" >{mapCurrentCloudCoverToWeather(currentCloudCover)}</Typography>
                 </Stack>
             </Stack>
         </Stack>

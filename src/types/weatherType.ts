@@ -8,13 +8,26 @@ export interface LocationResponse {
     countryCode: string
 }
 
-interface Hourly {
-    time: string[];
-    temperature_2m: number[];
-}
-
 export interface GeoLocationResponse {
     results: Coordinates[];
+}
+
+export interface Hourly {
+    time: string[];
+    temperature_2m: number[];
+    cloud_cover: number[];
+}
+
+export interface CurrentWeather {
+    date: string;
+    time: string;
+    temperature_2m: number;
+    relative_humidity_2m: number;
+    apparent_temperature: number;
+    rain: number;
+    snowfall: number;
+    wind_speed_10m: number;
+    cloud_cover: number;
 }
 
 export interface WeatherResponse {
@@ -22,18 +35,18 @@ export interface WeatherResponse {
     hourly: Hourly;
 }
 
-export interface CurrentWeather {
+export interface TransformedWeather {
     date: string;
-    time: string;
-    interval: number;
-    temperature_2m: number;
-    relative_humidity_2m: number;
-    cloud_cover: number;
-    apparent_temperature: number;
+    currentTime: string;
+    currentTemperature: number;
+    humidity: number;
+    feelsLike: number;
     rain: number;
     snowfall: number;
-    wind_speed_10m: number;
-    hourly: string[];
-    hourlyTemperature: number[]
+    windSpeed: number;
+    currentCloudCover: number;
+    hourlyCloudCover: number[],
+    hourlyTemperature: number[],
+    hourlyTime: string[]
 }
 

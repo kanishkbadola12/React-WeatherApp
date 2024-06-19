@@ -18,7 +18,11 @@ const Weekly: React.FC = () => {
 
     return (weather &&
         <Stack>
-            <WeeklyForecast />
+            <WeeklyForecast
+                hourlyTime={weather.hourlyTime}
+                hourlyTemperature={weather.hourlyTemperature}
+                hourlyCloudCover={weather.hourlyCloudCover}
+            />
         </Stack>
     )
 };
