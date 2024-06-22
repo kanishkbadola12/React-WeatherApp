@@ -8,15 +8,22 @@ import { useNavigate } from 'react-router-dom';
 
 export const SearchByLocation: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [tab, setTab] = useState('today');
+    const [tab, setTab] = useState(localStorage.getItem('tabState') || 'today');
     const [getCoordinates] = useLazyGetCoordinatesQuery();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const theme = useTheme();
 
     const handleTabState = () => {
-        tab === 'today' ? navigate('weekly') : navigate('..');
-        tab === 'today' ? setTab('week') : setTab('today');
+        if (tab === 'today') {
+            localStorage.setItem('tabState', 'week');
+            navigate('weekly');
+            setTab('week');
+        } else {
+            localStorage.setItem('tabState', 'today');
+            navigate('..');
+            setTab('today');
+        }
     }
 
     const handleLocationSearch = async (event: React.KeyboardEvent): Promise<void> => {
@@ -49,14 +56,9 @@ export const SearchByLocation: React.FC = () => {
             <TextField
                 onKeyDown={handleLocationSearch}
                 InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon />
-                        </InputAdornment>
-                    )
+                    startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>
                 }}
                 id="outlined-basic"
-                variant="outlined"
                 label="Search for places..."
                 inputRef={inputRef}
             />

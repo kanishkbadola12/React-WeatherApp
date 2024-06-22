@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Stack } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
-import HourlyConditions from "../components/daily-forecast/HourlyConditions";
 import DailyForecastSummary from "../components/daily-forecast/DailySummary";
+import HourlyForecast from "../components/daily-forecast/HourlyForecast";
 import { useAppSelector } from "../hooks/redux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
@@ -22,14 +22,14 @@ const Daily: React.FC = () => {
   }, [coordinates]);
 
   return (weather && geoLocation &&
-    <Stack spacing={6}>
-      <Stack direction="row" spacing={4}>
+    <Stack gap={6}>
+      <Stack direction="row" gap={4}>
         <DailyForecast
           currentTemperature={weather.currentTemperature}
           date={weather.date}
           currentCloudCover={weather.currentCloudCover}
         />
-        <HourlyConditions
+        <HourlyForecast
           currentTime={weather.currentTime}
           hourlyTime={weather.hourlyTime}
           hourlyTemperature={weather.hourlyTemperature}

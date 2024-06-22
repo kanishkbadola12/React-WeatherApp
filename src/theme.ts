@@ -45,5 +45,42 @@ export const customTheme = createTheme({
                 },
             },
         },
+        MuiCardContent: {
+            styleOverrides: {
+                root: {
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    alignItems: "center",
+                    height: "9rem",
+                    width: "9rem",
+                }
+            }
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    borderRadius: "16px"
+                }
+            }
+        },
+        MuiCircularProgress: {
+            styleOverrides: {
+                root: {
+                    height: "120px !important",
+                    width: "120px !important",
+                    '+.MuiBox-root': {
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }
+                }
+            }
+        }
     },
 });

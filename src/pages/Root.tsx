@@ -25,7 +25,12 @@ const RootLayout = () => {
     }, [dispatch]);
 
     return (
-        <Container sx={{ display: "flex", flexDirection: "column", gap: 6, mt: 4 }}>
+        <Container sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+            mt: 6
+        }}>
             <SearchByLocation />
             <Outlet></Outlet>
         </Container>

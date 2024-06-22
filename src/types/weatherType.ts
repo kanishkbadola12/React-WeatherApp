@@ -16,6 +16,13 @@ export interface Hourly {
     time: string[];
     temperature_2m: number[];
     cloud_cover: number[];
+    visibility: number[];
+}
+
+export interface Daily {
+    sunrise: string[];
+    sunset: string[];
+    uv_index_max: number[];
 }
 
 export interface CurrentWeather {
@@ -28,11 +35,13 @@ export interface CurrentWeather {
     snowfall: number;
     wind_speed_10m: number;
     cloud_cover: number;
+    wind_direction_10m: number;
 }
 
 export interface WeatherResponse {
     current: CurrentWeather;
     hourly: Hourly;
+    daily: Daily
 }
 
 export interface TransformedWeather {
@@ -44,9 +53,14 @@ export interface TransformedWeather {
     rain: number;
     snowfall: number;
     windSpeed: number;
+    windDirection: number;
     currentCloudCover: number;
-    hourlyCloudCover: number[],
-    hourlyTemperature: number[],
-    hourlyTime: string[]
+    hourlyCloudCover: number[];
+    hourlyTemperature: number[];
+    hourlyTime: string[];
+    visibility: number;
+    sunrise: string;
+    sunset: string;
+    uvIndex: number;
 }
 

@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
 import { mapDaysToWeather } from "../../utils/mapDaysToWeather";
 
 interface WeeklyForecastProps {
@@ -9,20 +9,31 @@ interface WeeklyForecastProps {
 
 export const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ hourlyTime, hourlyTemperature, hourlyCloudCover }) => {
     return (
-        <Stack direction="row" spacing={4}>
+        <Grid container rowSpacing={2} columnSpacing={2}>
             {Object.entries(mapDaysToWeather(hourlyTime, hourlyTemperature, hourlyCloudCover))
-                .map(([day, conditions], idx) => (
-                    <Grid container spacing={2} key={idx}>
-                        <Grid textAlign="center">
-                            <Typography variant="body2" color="primary">{day}</Typography>
-                            <Typography variant="overline" color="primary">{conditions.cloudCover}</Typography>
-                            <Box display="flex" justifyContent="space-around">
-                                <Typography variant="button" color="primary">{conditions.lowestTemp}</Typography>
-                                <Typography variant="button" color="primary">{conditions.highestTemp}</Typography>
-                            </Box>
-                        </Grid>
+                .map(([day, forecast], idx) => (
+                    <Grid item key={idx}>
+                        <Card>
+                            <CardContent>
+                                <Typography>{day}</Typography>
+                                <Stack gap="4px">
+                                    {forecast.icon}
+                                    <Typography variant="caption">{forecast.cloudCover}</Typography>
+                                </Stack>
+                                <Box display="flex" gap={2}>
+                                    <Box display="flex" alignItems="end" gap="2px">
+                                        <Typography pb="2px" variant="caption">L:</Typography>
+                                        <Typography>{forecast.lowestTemp}{'\u00b0'}</Typography>
+                                    </Box>
+                                    <Box display="flex" alignItems="end" gap="2px">
+                                        <Typography pb="2px" variant="caption">H:</Typography>
+                                        <Typography>{forecast.highestTemp}{'\u00b0'}</Typography>
+                                    </Box>
+                                </Box>
+                            </CardContent>
+                        </Card>
                     </Grid>
                 ))}
-        </Stack>
+        </Grid>
     )
 }

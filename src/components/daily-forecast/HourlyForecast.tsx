@@ -3,13 +3,13 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { mapTimeToTemperature } from "../../utils/mapTimeToTemperature";
 
-interface HourlyConditionsProps {
+interface HourlyForecastProps {
     currentTime: string
     hourlyTime: string[]
     hourlyTemperature: number[],
 }
 
-const HourlyConditions: React.FC<HourlyConditionsProps> = ({ currentTime, hourlyTime, hourlyTemperature }) => {
+const HourlyForecast: React.FC<HourlyForecastProps> = ({ currentTime, hourlyTime, hourlyTemperature }) => {
     const handleScrollLeft = () => {
         document.getElementById('weatherSlider')!.scrollLeft -= 300;
     }
@@ -19,16 +19,16 @@ const HourlyConditions: React.FC<HourlyConditionsProps> = ({ currentTime, hourly
     }
 
     return (
-        <Stack direction="row" width="80vw" overflow="hidden">
-            <Box display="flex" alignItems="center" mr="1rem" onClick={handleScrollLeft}>
-                <ArrowBackIosNewIcon sx={{ fontSize: "3.5rem", cursor: "pointer" }} />
+        <Stack direction="row" alignItems="center" overflow="hidden" flexBasis="70%">
+            <Box pr="1rem" onClick={handleScrollLeft}>
+                <ArrowBackIosNewIcon sx={{ fontSize: "4rem", cursor: "pointer" }} />
             </Box>
             <Box
                 id="weatherSlider"
                 display="flex"
                 gap={4}
                 alignItems="center"
-                sx={{ overflowX: "hidden", width: "80vw", scrollBehavior: "smooth" }}
+                sx={{ overflowX: "hidden", scrollBehavior: "smooth" }}
             >
                 {Object.entries(mapTimeToTemperature(
                     currentTime,
@@ -36,16 +36,16 @@ const HourlyConditions: React.FC<HourlyConditionsProps> = ({ currentTime, hourly
                     hourlyTemperature.slice(0, 24)
                 )).map(([time, temperature], idx) => (
                     <Box key={idx} display="flex" flexDirection="column" alignItems="center" >
-                        <Typography color="primary">{time}</Typography>
-                        <Typography color="primary">{temperature}</Typography>
+                        <Typography  >{time}</Typography>
+                        <Typography  >{temperature}{'\u00b0'}</Typography>
                     </Box>
                 ))}
             </Box>
-            <Box display="flex" alignItems="center" ml="1rem" onClick={handleScrollRight}>
-                <ArrowForwardIosIcon sx={{ fontSize: "3.5rem", cursor: "pointer" }} />
+            <Box pl="1rem" onClick={handleScrollRight}>
+                <ArrowForwardIosIcon sx={{ fontSize: "4rem", cursor: "pointer" }} />
             </Box>
         </Stack>
     )
 }
 
-export default HourlyConditions;
+export default HourlyForecast;

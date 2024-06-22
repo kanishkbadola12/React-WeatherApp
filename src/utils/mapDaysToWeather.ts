@@ -4,6 +4,7 @@ interface WeeklyConditions {
     lowestTemp: number;
     highestTemp: number;
     cloudCover: string;
+    icon: React.ReactNode
 }
 
 export const mapDaysToWeather = (hourly: string[], temperatures: number[], hourlyCloudCover: number[]) => {
@@ -25,7 +26,8 @@ export const mapDaysToWeather = (hourly: string[], temperatures: number[], hourl
             daysToWeatherMap[day] = {
                 lowestTemp,
                 highestTemp,
-                cloudCover: mapCurrentCloudCoverToWeather(avgCloudCover)
+                icon: mapCurrentCloudCoverToWeather(avgCloudCover).icon,
+                cloudCover: mapCurrentCloudCoverToWeather(avgCloudCover).text
             }
 
             // Reset arrays for the next day

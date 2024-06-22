@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
@@ -24,29 +24,28 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
 }) => {
     return (
         <Stack spacing={2}>
-            <Stack direction="row" display="flex" alignItems="center" spacing={1}>
+            <Box display="flex" alignItems="center" gap={1}>
                 <LocationOnOutlinedIcon sx={{ fontSize: "2rem" }} />
-                <Typography color="primary" variant="h4">{city},</Typography>
-                <Typography color="primary" variant="h4">{countryCode}</Typography>
-            </Stack>
+                <Typography variant="h4">{city},</Typography>
+                <Typography variant="h4">{countryCode}</Typography>
+            </Box>
             <Stack direction="row" spacing={16}>
                 <Stack>
                     <Typography>Chances of Rain</Typography>
-
-                    <Typography color="primary">Wind</Typography>
-                    <Typography color="primary">Feels Like</Typography>
-                    <Typography color="primary">Humidity</Typography>
+                    <Typography>Wind</Typography>
+                    <Typography>Feels Like</Typography>
+                    <Typography>Humidity</Typography>
                 </Stack>
                 <Stack>
-                    <Typography color="primary">{rain} %</Typography>
-                    <Typography color="primary">{windSpeed} km/h</Typography>
-                    <Typography color="primary">{feelsLike}</Typography>
-                    <Typography color="primary">{humidity}</Typography>
+                    <Typography>{rain} %</Typography>
+                    <Typography>{windSpeed} km/h</Typography>
+                    <Typography>{feelsLike}{'\u00b0'}</Typography>
+                    <Typography>{humidity}%</Typography>
                 </Stack>
             </Stack>
             <Stack direction="row" gap={1} justifyContent="end">
                 <AccessTimeOutlinedIcon />
-                <Typography color="primary">{currentTime}</Typography>
+                <Typography>{currentTime}</Typography>
             </Stack>
         </Stack>
     )
