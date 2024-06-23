@@ -3,7 +3,7 @@ import { Coordinates, WeatherResponse, TransformedWeather } from "../types/weath
 
 const current = 'temperature_2m,relative_humidity_2m,cloud_cover,apparent_temperature,rain,snowfall,wind_speed_10m,wind_direction_10m';
 const hourly = 'temperature_2m,cloud_cover,visibility&timezone=auto';
-const daily = 'sunrise,sunset,uv_index_max';
+const daily = 'sunrise,sunset,uv_index_max,precipitation_probability_max';
 const params = `current=${current}&hourly=${hourly}&daily=${daily}`;
 
 const forecastApi = createApi({
@@ -14,6 +14,7 @@ const forecastApi = createApi({
             query: ({ latitude, longitude }) => `forecast?latitude=${latitude}&longitude=${longitude}&` + params,
             transformResponse: (response: WeatherResponse): TransformedWeather => {
                 const { current, hourly, daily } = response;
+
                 return {
                     date: current.time.split('T')[0],
                     currentTime: current.time.split('T')[1],
@@ -31,7 +32,8 @@ const forecastApi = createApi({
                     visibility: Math.round(hourly.visibility.splice(0, 24).reduce((acc, item) => item + acc, 0) / 24000),
                     sunrise: daily.sunrise[0].split('T')[1],
                     sunset: daily.sunset[0].split('T')[1],
-                    uvIndex: Math.round(Math.max(...daily.uv_index_max))
+                    uvIndex: Math.round(Math.max(...daily.uv_index_max)),
+                    chancesOfRain: daily.precipitation_probability_max
                 };
             }
         })

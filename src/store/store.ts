@@ -4,6 +4,7 @@ import coordinatesApi from "../services/coordinatesApi";
 import geoLocationApi from "../services/geoLocationApi";
 import forecastApi from "../services/forecastApi";
 import coordinatesSlice from "./coordinatesSlice";
+import airQualityApi from "../services/airQualityApi";
 
 export const store = configureStore({
     reducer: {
@@ -11,13 +12,15 @@ export const store = configureStore({
         [coordinatesApi.reducerPath]: coordinatesApi.reducer,
         [forecastApi.reducerPath]: forecastApi.reducer,
         [geoLocationApi.reducerPath]: geoLocationApi.reducer,
+        [airQualityApi.reducerPath]: airQualityApi.reducer
     },
-    middleware: (getDefaultMiddleware) => 
+    middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .concat([
                 coordinatesApi.middleware,
                 forecastApi.middleware,
-                geoLocationApi.middleware
+                geoLocationApi.middleware,
+                airQualityApi.middleware
             ])
 });
 

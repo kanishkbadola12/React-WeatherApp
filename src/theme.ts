@@ -67,8 +67,8 @@ export const customTheme = createTheme({
         MuiCircularProgress: {
             styleOverrides: {
                 root: {
-                    height: "120px !important",
-                    width: "120px !important",
+                    height: "7rem !important",
+                    width: "7rem !important",
                     '+.MuiBox-root': {
                         top: 0,
                         left: 0,

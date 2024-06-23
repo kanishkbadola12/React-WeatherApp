@@ -1,15 +1,32 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
-import { formatDate } from "../../utils/formatDate";
-import { mapCurrentCloudCoverToWeather } from "../../utils/mapCloudCoverToWeather";
+import { mapUnitsToWeather } from "../../utils/mapUnitsToWeather";
 
 interface DailyForecastProps {
-    currentTemperature: number
-    date: string
-    currentCloudCover: number
+    currentTemperature: number;
+    date: string;
+    currentCloudCover: number;
+    chancesOfRain: number[];
 }
 
-export const DailyForecast: React.FC<DailyForecastProps> = ({ currentTemperature, date, currentCloudCover }) => {
+const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+
+    return {
+        day: date.toLocaleDateString('en-US', { weekday: 'long' }),
+        month: date.toLocaleString('default', { month: 'long' }),
+        date: date.getDate()
+    }
+}
+
+export const DailyForecast: React.FC<DailyForecastProps> = ({
+    currentTemperature,
+    date,
+    currentCloudCover,
+    chancesOfRain
+}) => {
+    const { icon, condition } = mapUnitsToWeather(currentCloudCover, chancesOfRain[0]);
+
     return (
         <>
             <Stack flexBasis="15%" alignItems="center">
@@ -23,8 +40,8 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ currentTemperature
                 </Stack>
             </Stack>
             <Stack flexBasis="10%" alignItems="center" justifyContent="end" gap={1}>
-                <Box>{mapCurrentCloudCoverToWeather(currentCloudCover).icon}</Box>
-                <Typography variant="caption"   >{mapCurrentCloudCoverToWeather(currentCloudCover).text}</Typography>
+                <Box>{icon}</Box>
+                <Typography variant="caption">{condition}</Typography>
             </Stack>
         </>
     )

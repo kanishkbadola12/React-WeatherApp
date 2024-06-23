@@ -28,6 +28,7 @@ const Daily: React.FC = () => {
           currentTemperature={weather.currentTemperature}
           date={weather.date}
           currentCloudCover={weather.currentCloudCover}
+          chancesOfRain={weather.chancesOfRain}
         />
         <HourlyForecast
           currentTime={weather.currentTime}

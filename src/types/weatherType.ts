@@ -1,3 +1,12 @@
+export type WeatherFactors = 'AQI' | 'UV Index' | 'Wind Speed' | 'Humidity' | 'Visibility';
+type NoRain = 'No rain & Clear' | 'No rain & Partly Cloudy' | 'No rain & Mostly Cloudy' | 'No rain & Overcast';
+type LightRain = 'Light rain & Clear' | 'Light rain & Partly Cloudy' | 'Light rain & Mostly Cloudy' | 'Light rain & Overcast';
+type ModerateRain = 'Moderate rain & Clear' | 'Moderate rain & Partly Cloudy' | 'Moderate rain & Mostly Cloudy' | 'Moderate rain & Overcast';
+type HeavyRain = 'Heavy rain & Clear' | 'Heavy rain & Partly Cloudy' | 'Heavy rain & Mostly Cloudy' | 'Heavy rain & Overcast';
+
+export type WeatherState = NoRain | LightRain | ModerateRain | HeavyRain;
+
+
 export interface Coordinates {
     latitude: number | null;
     longitude: number | null;
@@ -23,6 +32,7 @@ export interface Daily {
     sunrise: string[];
     sunset: string[];
     uv_index_max: number[];
+    precipitation_probability_max: number[];
 }
 
 export interface CurrentWeather {
@@ -36,6 +46,12 @@ export interface CurrentWeather {
     wind_speed_10m: number;
     cloud_cover: number;
     wind_direction_10m: number;
+}
+
+export interface AqiResponse {
+    current: {
+        pm10: number
+    }
 }
 
 export interface WeatherResponse {
@@ -62,5 +78,5 @@ export interface TransformedWeather {
     sunrise: string;
     sunset: string;
     uvIndex: number;
+    chancesOfRain: number[]
 }
-

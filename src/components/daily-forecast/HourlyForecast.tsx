@@ -36,8 +36,8 @@ const HourlyForecast: React.FC<HourlyForecastProps> = ({ currentTime, hourlyTime
                     hourlyTemperature.slice(0, 24)
                 )).map(([time, temperature], idx) => (
                     <Box key={idx} display="flex" flexDirection="column" alignItems="center" >
-                        <Typography  >{time}</Typography>
-                        <Typography  >{temperature}{'\u00b0'}</Typography>
+                        <Typography>{time}</Typography>
+                        <Typography>{temperature}{'\u00b0'}</Typography>
                     </Box>
                 ))}
             </Box>

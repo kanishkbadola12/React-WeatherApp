@@ -4,21 +4,22 @@ import { mapDaysToWeather } from "../../utils/mapDaysToWeather";
 interface WeeklyForecastProps {
     hourlyTime: string[];
     hourlyTemperature: number[];
-    hourlyCloudCover: number[],
+    hourlyCloudCover: number[];
+    chancesOfRain: number[];
 }
 
-export const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ hourlyTime, hourlyTemperature, hourlyCloudCover }) => {
+export const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ hourlyTime, hourlyTemperature, hourlyCloudCover, chancesOfRain }) => {
     return (
         <Grid container rowSpacing={2} columnSpacing={2}>
-            {Object.entries(mapDaysToWeather(hourlyTime, hourlyTemperature, hourlyCloudCover))
+            {Object.entries(mapDaysToWeather(hourlyTime, hourlyTemperature, hourlyCloudCover, chancesOfRain))
                 .map(([day, forecast], idx) => (
                     <Grid item key={idx}>
                         <Card>
                             <CardContent>
                                 <Typography>{day}</Typography>
                                 <Stack gap="4px">
-                                    {forecast.icon}
-                                    <Typography variant="caption">{forecast.cloudCover}</Typography>
+                                    {forecast.weather.icon}
+                                    <Typography variant="caption">{forecast.weather.condition}</Typography>
                                 </Stack>
                                 <Box display="flex" gap={2}>
                                     <Box display="flex" alignItems="end" gap="2px">
