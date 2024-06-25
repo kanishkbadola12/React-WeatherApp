@@ -26,7 +26,7 @@ const Weekly: React.FC = () => {
                 hourlyTime={weather.hourlyTime}
                 hourlyTemperature={weather.hourlyTemperature}
                 hourlyCloudCover={weather.hourlyCloudCover}
-                chancesOfRain={weather.chancesOfRain}
+                hourlyChancesOfRain={weather.hourlyChancesOfRain}
             />
             <Highlights
                 uvIndex={weather.uvIndex}

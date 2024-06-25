@@ -1,6 +1,6 @@
 import { mapUnitsToWeather } from "./mapUnitsToWeather";
 
-interface WeeklyConditions {
+interface DailyConditions {
     lowestTemp: number;
     highestTemp: number;
     weather: {
@@ -10,23 +10,23 @@ interface WeeklyConditions {
 }
 
 export const mapDaysToWeather = (
-    hourly: string[],
-    temperatures: number[],
+    hourlyTime: string[],
+    hourlyTemperature: number[],
     hourlyCloudCover: number[],
-    chancesOfRain: number[]
+    hourlyChancesOfRain: number[]
 ) => {
-    let daysToWeatherMap: Record<string, WeeklyConditions> = {};
+    let daysToWeatherMap: Record<string, DailyConditions> = {};
     let temperatureOfDay: number[] = [];
     let weatherOfDay: number[] = [];
     let rainIdx = 0;
 
-    for (let idx = 0; idx < temperatures.length; idx++) {
-        temperatureOfDay.push(temperatures[idx]);
+    for (let idx = 0; idx < hourlyTemperature.length; idx++) {
+        temperatureOfDay.push(hourlyTemperature[idx]);
         weatherOfDay.push(hourlyCloudCover[idx]);
 
         if ((idx + 1) % 24 === 0) {
 
-            const date = new Date(hourly[idx].split('T')[0]);
+            const date = new Date(hourlyTime[idx].split('T')[0]);
             const day = date.toLocaleDateString('en-US', { weekday: 'long' });
             const lowestTemp = Math.round(Math.min(...temperatureOfDay));
             const highestTemp = Math.round(Math.max(...temperatureOfDay));
@@ -35,7 +35,7 @@ export const mapDaysToWeather = (
             daysToWeatherMap[day] = {
                 lowestTemp,
                 highestTemp,
-                weather: mapUnitsToWeather(avgCloudCover, chancesOfRain[rainIdx++])
+                weather: mapUnitsToWeather(avgCloudCover, hourlyChancesOfRain[rainIdx++])
             }
 
             // Reset arrays for the next day

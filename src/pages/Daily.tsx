@@ -28,12 +28,14 @@ const Daily: React.FC = () => {
           currentTemperature={weather.currentTemperature}
           date={weather.date}
           currentCloudCover={weather.currentCloudCover}
-          chancesOfRain={weather.chancesOfRain}
+          chancesOfRain={weather.hourlyChancesOfRain[0]}
         />
         <HourlyForecast
           currentTime={weather.currentTime}
           hourlyTime={weather.hourlyTime}
           hourlyTemperature={weather.hourlyTemperature}
+          chancesOfRain={weather.hourlyChancesOfRain}
+          cloudCover={weather.hourlyCloudCover}
         />
       </Stack>
       <DailyForecastSummary
@@ -44,6 +46,7 @@ const Daily: React.FC = () => {
         feelsLike={weather.feelsLike}
         humidity={weather.humidity}
         currentTime={weather.currentTime}
+        chancesOfRain={weather.hourlyChancesOfRain[0]}
       />
     </Stack>
   )

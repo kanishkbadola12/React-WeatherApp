@@ -1,7 +1,6 @@
 import "./App.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/Root";
-import { WeeklyForecast } from "./components/weekly-forecast/WeeklyForecast";
 import Daily from "./pages/Daily";
 import Weekly from "./pages/Weekly";
 

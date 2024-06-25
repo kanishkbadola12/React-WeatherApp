@@ -6,7 +6,7 @@ interface DailyForecastProps {
     currentTemperature: number;
     date: string;
     currentCloudCover: number;
-    chancesOfRain: number[];
+    chancesOfRain: number;
 }
 
 const formatDate = (dateStr: string) => {
@@ -25,7 +25,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
     currentCloudCover,
     chancesOfRain
 }) => {
-    const { icon, condition } = mapUnitsToWeather(currentCloudCover, chancesOfRain[0]);
+    const { icon, condition } = mapUnitsToWeather(currentCloudCover, chancesOfRain);
 
     return (
         <>
@@ -39,8 +39,8 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
                     ))}
                 </Stack>
             </Stack>
-            <Stack flexBasis="10%" alignItems="center" justifyContent="end" gap={1}>
-                <Box>{icon}</Box>
+            <Stack justifyContent="end" gap={1}>
+                <Box display="flex" fontSize="4.5rem">{icon}</Box>
                 <Typography variant="caption">{condition}</Typography>
             </Stack>
         </>

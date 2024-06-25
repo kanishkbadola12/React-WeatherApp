@@ -1,5 +1,5 @@
 import { faSun } from "@fortawesome/free-regular-svg-icons";
-import { faCloud, faCloudRain, faCloudShowersHeavy, faCloudSunRain } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCloud, faCloudRain, faCloudShowersHeavy, faCloudSunRain } from "@fortawesome/free-solid-svg-icons";
 import { faCloudSun } from "@fortawesome/free-solid-svg-icons/faCloudSun";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { WeatherState } from "../types/weatherType";
@@ -27,25 +27,34 @@ export const mapUnitsToWeather = (cloudCover: number, chancesOfRain: number): {
         'Heavy rain & Overcast': { icon: faCloudShowersHeavy, condition: 'Overcast', color: '#00008B' }
     };
     const chancesOfRainRanges = [
-        { min: 0, max: 10, rainState: 'No rain' },
-        { min: 10, max: 30, rainState: 'Light rain' },
-        { min: 30, max: 60, rainState: 'Moderate rain' },
-        { min: 60, max: 100, rainState: 'Heavy rain' },
+        { min: 0, max: 10, rain: 'No rain' },
+        { min: 10, max: 30, rain: 'Light rain' },
+        { min: 30, max: 60, rain: 'Moderate rain' },
+        { min: 60, max: 120, rain: 'Heavy rain' },
     ];
     const cloudCoverRanges = [
-        { min: 0, max: 10, cloudCoverState: 'Clear' },
-        { min: 11, max: 50, cloudCoverState: 'Partly Cloudy' },
-        { min: 51, max: 89, cloudCoverState: 'Mostly Cloudy' },
-        { min: 90, max: 100, cloudCoverState: 'Overcast' },
+        { min: 0, max: 10, cloudCover: 'Clear' },
+        { min: 10, max: 50, cloudCover: 'Partly Cloudy' },
+        { min: 50, max: 90, cloudCover: 'Mostly Cloudy' },
+        { min: 90, max: 120, cloudCover: 'Overcast' },
     ];
 
-    const { rainState } = chancesOfRainRanges.find(range => chancesOfRain >= range.min && chancesOfRain < range.max)!;
-    const { cloudCoverState } = cloudCoverRanges.find(range => cloudCover >= range.min && cloudCover < range.max)!;
-    const weatherState = (rainState + ' & ' + cloudCoverState) as WeatherState;
-    const weather = weatherIcons[weatherState];
+    const rainState = chancesOfRainRanges.find(range => chancesOfRain >= range.min && chancesOfRain < range.max)?.rain;
+    const cloudCoverState = cloudCoverRanges.find(range => cloudCover >= range.min && cloudCover < range.max)?.cloudCover;
 
-    return {
-        icon: <FontAwesomeIcon fontSize="3rem" color={weather.color} icon={weather.icon} />,
-        condition: weather.condition
+    if (rainState && cloudCoverState) {
+        const weatherState = (rainState + ' & ' + cloudCoverState) as WeatherState;
+        const weather = weatherIcons[weatherState];
+
+        return {
+            icon: <FontAwesomeIcon color={weather.color} icon={weather.icon} />,
+            condition: weather.condition
+        }
+    } else {
+        return {
+            icon: <FontAwesomeIcon icon={faBan} />,
+            condition: 'Not known'
+        }
     }
+
 }

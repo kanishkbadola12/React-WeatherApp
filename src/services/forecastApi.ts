@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Coordinates, WeatherResponse, TransformedWeather } from "../types/weatherType";
 
 const current = 'temperature_2m,relative_humidity_2m,cloud_cover,apparent_temperature,rain,snowfall,wind_speed_10m,wind_direction_10m';
-const hourly = 'temperature_2m,cloud_cover,visibility&timezone=auto';
-const daily = 'sunrise,sunset,uv_index_max,precipitation_probability_max';
+const hourly = 'temperature_2m,cloud_cover,visibility,precipitation_probability&timezone=auto';
+const daily = 'sunrise,sunset,uv_index_max';
 const params = `current=${current}&hourly=${hourly}&daily=${daily}`;
 
 const forecastApi = createApi({
@@ -33,7 +33,7 @@ const forecastApi = createApi({
                     sunrise: daily.sunrise[0].split('T')[1],
                     sunset: daily.sunset[0].split('T')[1],
                     uvIndex: Math.round(Math.max(...daily.uv_index_max)),
-                    chancesOfRain: daily.precipitation_probability_max
+                    hourlyChancesOfRain: hourly.precipitation_probability
                 };
             }
         })
