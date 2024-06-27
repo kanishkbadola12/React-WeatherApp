@@ -28,8 +28,8 @@ const RootLayout = () => {
         <Container sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 6,
-            mt: 6
+            gap: 4,
+            mt: 4
         }}>
             <SearchByLocation />
             <Outlet></Outlet>

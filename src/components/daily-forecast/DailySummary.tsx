@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
@@ -23,32 +23,51 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
     currentTime,
     chancesOfRain
 }) => {
+    const theme = useTheme();
+    const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+
     return (
-        <Stack spacing={1}>
-            <Box display="flex" alignItems="center" gap={1}>
-                <LocationOnOutlinedIcon sx={{ fontSize: "2rem" }} />
-                <Typography variant="h4">{city},</Typography>
-                <Typography variant="h4">{countryCode}</Typography>
-            </Box>
-            <Stack direction="row" spacing={16}>
-                <Stack gap={1}>
-                    <Typography>Chances of Rain</Typography>
-                    <Typography>Wind</Typography>
-                    <Typography>Feels Like</Typography>
-                    <Typography>Humidity</Typography>
-                </Stack>
-                <Stack gap={1}>
-                    <Typography>{chancesOfRain} %</Typography>
-                    <Typography>{windSpeed} km/h</Typography>
-                    <Typography>{feelsLike}{'\u00b0'}</Typography>
-                    <Typography>{humidity}%</Typography>
+        <Box>
+            <Stack spacing={2} alignItems={isSm ? "center" : "start"}>
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                >
+                    <LocationOnOutlinedIcon sx={{ fontSize: "2rem" }} />
+                    <Typography variant="h4">{city}, {countryCode}</Typography>
+                </Box>
+                <Stack
+                    direction="row"
+                    spacing={isSm ? 8 : 16}
+                    paddingLeft="30px"
+                >
+                    <Stack gap={1}>
+                        <Typography>Chances of Rain</Typography>
+                        <Typography>Wind</Typography>
+                        <Typography>Feels Like</Typography>
+                        <Typography>Humidity</Typography>
+                    </Stack>
+                    <Stack gap={1}>
+                        <Typography>{chancesOfRain} %</Typography>
+                        <Typography>{windSpeed} km/h</Typography>
+                        <Typography>{feelsLike}{'\u00b0'}</Typography>
+                        <Typography>{humidity}%</Typography>
+                    </Stack>
                 </Stack>
             </Stack>
-            <Stack direction="row" gap={1} justifyContent="end">
+            <Box
+                position="relative"
+                display="flex"
+                flexDirection="row"
+                mt={4}
+                gap={1}
+                justifyContent={isSm ? "center" : "end"}
+            >
                 <AccessTimeOutlinedIcon />
                 <Typography>{currentTime}</Typography>
-            </Stack>
-        </Stack>
+            </Box>
+        </Box>
     )
 };
 

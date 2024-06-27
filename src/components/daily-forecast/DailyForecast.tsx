@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { mapUnitsToWeather } from "../../utils/mapUnitsToWeather";
 
@@ -25,7 +25,9 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
     currentCloudCover,
     chancesOfRain
 }) => {
-    const { icon, condition } = mapUnitsToWeather(currentCloudCover, chancesOfRain);
+    const { icon, condition } = useMemo(() => {
+        return mapUnitsToWeather(currentCloudCover, chancesOfRain)
+    }, [currentCloudCover, chancesOfRain]);
 
     return (
         <>
@@ -39,7 +41,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
                     ))}
                 </Stack>
             </Stack>
-            <Stack justifyContent="end" gap={1}>
+            <Stack justifyContent="end" alignItems="center" gap={1}>
                 <Box display="flex" fontSize="4.5rem">{icon}</Box>
                 <Typography variant="caption">{condition}</Typography>
             </Stack>

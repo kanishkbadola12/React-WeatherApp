@@ -15,11 +15,11 @@ interface range {
 const getAqiProgress = (value: number): ProgressCardValue => {
     const valuePercentage = Math.round((value / 505) * 100)
     const aqiRanges: range[] = [
-        { min: 0, max: 55, data: { progress: valuePercentage, color: 'success' } },
-        { min: 56, max: 255, data: { progress: valuePercentage, color: 'success' } },
-        { min: 256, max: 355, data: { progress: valuePercentage, color: 'warning' } },
-        { min: 356, max: 425, data: { progress: valuePercentage, color: 'error' } },
-        { min: 426, max: 505, data: { progress: valuePercentage, color: 'error' } },
+        { min: 0, max: 56, data: { progress: valuePercentage, color: 'success' } },
+        { min: 56, max: 256, data: { progress: valuePercentage, color: 'success' } },
+        { min: 256, max: 356, data: { progress: valuePercentage, color: 'warning' } },
+        { min: 356, max: 426, data: { progress: valuePercentage, color: 'error' } },
+        { min: 426, max: 506, data: { progress: valuePercentage, color: 'error' } },
         { min: 506, max: 1000, data: { progress: valuePercentage, color: 'error' } },
     ];
 
@@ -28,30 +28,30 @@ const getAqiProgress = (value: number): ProgressCardValue => {
 };
 
 const getUVProgress = (value: number): ProgressCardValue => {
-    const valuePercentage = Math.round((value / 11) * 100);
+    const valuePercentage = Math.round((value / 15) * 100);
     const uvRanges: range[] = [
         { min: 1, max: 2, data: { progress: valuePercentage, color: 'success' } },
-        { min: 3, max: 5, data: { progress: valuePercentage, color: 'success' } },
-        { min: 6, max: 7, data: { progress: valuePercentage, color: 'warning' } },
-        { min: 8, max: 10, data: { progress: valuePercentage, color: 'error' } },
-        { min: 11, max: 100, data: { progress: valuePercentage, color: 'error' } },
+        { min: 2, max: 5, data: { progress: valuePercentage, color: 'success' } },
+        { min: 5, max: 7, data: { progress: valuePercentage, color: 'warning' } },
+        { min: 7, max: 10, data: { progress: valuePercentage, color: 'error' } },
+        { min: 10, max: 15, data: { progress: valuePercentage, color: 'error' } },
     ];
 
-    const { data } = uvRanges.find(range => value >= range.min && value <= range.max)!;
+    const { data } = uvRanges.find(range => value >= range.min && value < range.max)!;
     return data;
 };
 
 const getWindProgress = (value: number): ProgressCardValue => {
     const valuePercentage = Math.round((value / 118) * 100);
-    const uvRanges: range[] = [
-        { min: 1, max: 19, data: { progress: valuePercentage, color: 'success' } },
-        { min: 20, max: 49, data: { progress: valuePercentage, color: 'success' } },
-        { min: 50, max: 88, data: { progress: valuePercentage, color: 'warning' } },
-        { min: 89, max: 117, data: { progress: valuePercentage, color: 'error' } },
-        { min: 118, max: 1000, data: { progress: valuePercentage, color: 'error' } },
+    const windRanges: range[] = [
+        { min: 1, max: 20, data: { progress: valuePercentage, color: 'success' } },
+        { min: 20, max: 50, data: { progress: valuePercentage, color: 'success' } },
+        { min: 50, max: 90, data: { progress: valuePercentage, color: 'warning' } },
+        { min: 90, max: 117, data: { progress: valuePercentage, color: 'error' } },
+        { min: 117, max: 500, data: { progress: valuePercentage, color: 'error' } },
     ];
 
-    const { data } = uvRanges.find(range => value >= range.min && value <= range.max)!;
+    const { data } = windRanges.find(range => value >= range.min && value < range.max)!;
     return data;
 };
 
@@ -59,27 +59,27 @@ const getHumidityProgress = (value: number): ProgressCardValue => {
     const valuePercentage = Math.round((value / 100) * 100);
     const humidityRanges: range[] = [
         { min: 0, max: 30, data: { progress: valuePercentage, color: 'success' } },
-        { min: 31, max: 50, data: { progress: valuePercentage, color: 'success' } },
-        { min: 51, max: 70, data: { progress: valuePercentage, color: 'warning' } },
-        { min: 71, max: 90, data: { progress: valuePercentage, color: 'error' } },
-        { min: 91, max: 100, data: { progress: valuePercentage, color: 'error' } },
+        { min: 30, max: 50, data: { progress: valuePercentage, color: 'success' } },
+        { min: 50, max: 70, data: { progress: valuePercentage, color: 'warning' } },
+        { min: 70, max: 90, data: { progress: valuePercentage, color: 'error' } },
+        { min: 90, max: 100, data: { progress: valuePercentage, color: 'error' } }
     ];
 
-    const { data } = humidityRanges.find(range => value >= range.min && value <= range.max)!;
+    const { data } = humidityRanges.find(range => value >= range.min && value < range.max)!;
     return data;
 };
 
 const getVisibilityProgress = (value: number): ProgressCardValue => {
-    const valuePercentage = Math.round((value / 30) * 100);
-    const humidityRanges: range[] = [
-        { min: 11, max: 30, data: { progress: valuePercentage, color: 'success' } },
+    const valuePercentage = Math.round((value / 50) * 100);
+    const visibilityRanges: range[] = [
+        { min: 0, max: 2, data: { progress: valuePercentage, color: 'error' } },
+        { min: 2, max: 4, data: { progress: valuePercentage, color: 'error' } },
+        { min: 4, max: 6, data: { progress: valuePercentage, color: 'warning' } },
         { min: 6, max: 10, data: { progress: valuePercentage, color: 'success' } },
-        { min: 4, max: 5, data: { progress: valuePercentage, color: 'warning' } },
-        { min: 2, max: 3, data: { progress: valuePercentage, color: 'error' } },
-        { min: 0, max: 1, data: { progress: valuePercentage, color: 'error' } },
+        { min: 10, max: 50, data: { progress: valuePercentage, color: 'success' } }
     ];
 
-    const { data } = humidityRanges.find(range => value >= range.min && value <= range.max)!;
+    const { data } = visibilityRanges.find(range => value >= range.min && value < range.max)!;
     return data;
 }
 

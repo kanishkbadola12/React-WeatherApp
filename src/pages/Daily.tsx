@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Stack } from "@mui/material";
+import { Stack, useMediaQuery, useTheme } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
 import DailyForecastSummary from "../components/daily-forecast/DailySummary";
 import HourlyForecast from "../components/daily-forecast/HourlyForecast";
@@ -12,6 +12,8 @@ const Daily: React.FC = () => {
   const coordinates = useAppSelector((state: RootState) => state.coordinates);
   const [getForecast, { data: weather }] = useLazyGetForecastQuery();
   const [getLocation, { data: geoLocation }] = useLazyGetGeoLocationQuery();
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     console.log(coordinates);
@@ -23,7 +25,7 @@ const Daily: React.FC = () => {
 
   return (weather && geoLocation &&
     <Stack gap={6}>
-      <Stack direction="row" gap={4}>
+      <Stack direction={isMd ? "column" : "row"} gap={4}>
         <DailyForecast
           currentTemperature={weather.currentTemperature}
           date={weather.date}

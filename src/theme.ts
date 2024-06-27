@@ -1,4 +1,4 @@
-import { createTheme, outlinedInputClasses } from "@mui/material";
+import { createTheme } from "@mui/material";
 
 export const customTheme = createTheme({
     palette: {
@@ -10,10 +10,20 @@ export const customTheme = createTheme({
     typography: {
         fontSize: 16,
     },
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+        },
+    },
     components: {
         MuiTextField: {
             styleOverrides: {
                 root: {
+                    top: "16px",
                     '--TextField-brandBorderColor': '#E0E3E7',
                     '--TextField-brandBorderHoverColor': '#343a40',
                     '--TextField-brandBorderFocusedColor': '#343a40',
@@ -23,24 +33,6 @@ export const customTheme = createTheme({
                     },
                     '& label': {
                         fontSize: "small",
-                    },
-                    '& label.Mui-focused': {
-                        color: 'var(--TextField-brandBorderFocusedColor)',
-                    },
-                },
-            },
-        },
-        MuiOutlinedInput: {
-            styleOverrides: {
-                notchedOutline: {
-                    borderColor: 'var(--TextField-brandBorderColor)',
-                },
-                root: {
-                    [`&:hover .${outlinedInputClasses.notchedOutline}`]: {
-                        borderColor: 'var(--TextField-brandBorderHoverColor)',
-                    },
-                    [`&.Mui-focused .${outlinedInputClasses.notchedOutline}`]: {
-                        borderColor: 'var(--TextField-brandBorderFocusedColor)',
                     },
                 },
             },
@@ -78,6 +70,16 @@ export const customTheme = createTheme({
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                    }
+                }
+            }
+        },
+        MuiFormHelperText: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-error': {
+                        color: '#c1121f',
+                        width: "14rem",
                     }
                 }
             }

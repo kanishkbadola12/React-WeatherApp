@@ -11,6 +11,15 @@ export interface Coordinates {
     longitude: number | null;
 }
 
+export interface WeeklyConditions {
+    lowestTemp: number;
+    highestTemp: number;
+    weather: {
+        condition: string;
+        icon: React.ReactNode
+    }
+}
+
 export interface LocationResponse {
     city: string;
     countryCode: string

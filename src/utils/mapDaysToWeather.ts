@@ -1,13 +1,5 @@
+import { WeeklyConditions } from "../types/weatherType";
 import { mapUnitsToWeather } from "./mapUnitsToWeather";
-
-interface DailyConditions {
-    lowestTemp: number;
-    highestTemp: number;
-    weather: {
-        condition: string;
-        icon: React.ReactNode
-    }
-}
 
 export const mapDaysToWeather = (
     hourlyTime: string[],
@@ -15,7 +7,7 @@ export const mapDaysToWeather = (
     hourlyCloudCover: number[],
     hourlyChancesOfRain: number[]
 ) => {
-    let daysToWeatherMap: Record<string, DailyConditions> = {};
+    let daysToWeatherMap: Record<string, WeeklyConditions> = {};
     let temperatureOfDay: number[] = [];
     let weatherOfDay: number[] = [];
     let rainIdx = 0;
