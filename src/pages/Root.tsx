@@ -1,18 +1,19 @@
 import { Outlet } from "react-router-dom";
-import { Container, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useAppDispatch } from "../hooks/redux";
+import { Container, useMediaQuery, useTheme } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useEffect, useState } from "react";
-import { setCoordinates } from "../store/coordinatesSlice";
-import { SearchByLocation } from "../components/search/SearchByLocation";
-import { LoadingIndicator } from "../components/ui/LoadingIndicator";
+import { setCoordinates } from "../store/slices/coordinates";
 import { Error } from "../components/ui/Error";
+import { Header } from "../components/layout/Header";
+import { Footer } from "../components/layout/Footer";
+import { RootState } from "../store/store";
 
 const RootLayout = () => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
-    const [fetchingLocation, setFetchingLocation] = useState(true);
     const [locationError, setLocationError] = useState("");
+    const { isAppLoading } = useAppSelector((state: RootState) => state.isAppLoading);
 
     useEffect(() => {
         if ("geolocation" in navigator) {
@@ -28,7 +29,6 @@ const RootLayout = () => {
         } else {
             setLocationError("Browser doesn't support Geolocation");
         }
-        setFetchingLocation(false);
     }, [dispatch]);
 
     if (locationError !== "") {
@@ -36,24 +36,12 @@ const RootLayout = () => {
     }
 
     return (
-        fetchingLocation ? (
-            <LoadingIndicator>
-                <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">Fetching Location...</Typography>
-            </LoadingIndicator>
-        ) : (
-            <Container
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: isXs ? 6 : 4,
-                    mt: 4
-                }}
-            >
-                <SearchByLocation />
-                <Outlet />
-            </Container>
-        )
-    );
+        <Container sx={{ display: "flex", flexDirection: "column", gap: isXs ? 6 : 4, mt: 4 }}>
+            <Header />
+            <Outlet />
+            {!isAppLoading && <Footer />}
+        </Container>
+    )
 }
 
 export default RootLayout;

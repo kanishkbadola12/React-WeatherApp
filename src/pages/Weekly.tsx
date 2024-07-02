@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
 import { WeeklyForecast } from "../components/weekly-forecast/WeeklyForecast";
@@ -8,6 +8,7 @@ import { Highlights } from "../components/weekly-forecast/Highlights";
 import { useLazyGetAirQualityQuery } from "../services/airQualityApi";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { Error } from "../components/ui/Error";
+import { setAppLoading } from "../store/slices/appLoading";
 
 const Weekly: React.FC = () => {
     const coordinates = useAppSelector((state: RootState) => state.coordinates);
@@ -29,9 +30,11 @@ const Weekly: React.FC = () => {
             error: aqiError
         }
     ] = useLazyGetAirQualityQuery();
-
+    const [isComponentLoading, setIsComponentLoading] = useState(false);
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
+    const { isAppLoading } = useAppSelector((state: RootState) => state.isAppLoading);
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (coordinates.latitude != null && coordinates.longitude != null) {
@@ -41,7 +44,16 @@ const Weekly: React.FC = () => {
         }
     }, [coordinates]);
 
-    if (isForecastFetching || isAqiFetching) {
+    useEffect(() => {
+        if (isForecastFetching && isAqiFetching) {
+            setIsComponentLoading(true);
+        }
+        if (!isForecastFetching && !isAqiFetching && isComponentLoading) {
+            dispatch(setAppLoading(false));
+        }
+    }, [isForecastFetching, isAqiFetching, isComponentLoading]);
+
+    if (isAppLoading) {
         return (
             <LoadingIndicator>
                 <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">Loading Weekly Weather Data...</Typography>

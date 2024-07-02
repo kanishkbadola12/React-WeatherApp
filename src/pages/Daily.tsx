@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
 import DailyForecastSummary from "../components/daily-forecast/DailySummary";
 import HourlyForecast from "../components/daily-forecast/HourlyForecast";
-import { useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
 import { useLazyGetGeoLocationQuery } from "../services/geoLocationApi";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { Error } from "../components/ui/Error";
+import { setAppLoading } from "../store/slices/appLoading";
 
 const Daily: React.FC = () => {
   const [
@@ -29,11 +30,13 @@ const Daily: React.FC = () => {
       error: locationError
     }
   ] = useLazyGetGeoLocationQuery();
-
+  const [isComponentLoading, setIsComponentLoading] = useState(false);
   const coordinates = useAppSelector((state: RootState) => state.coordinates);
+  const { isAppLoading } = useAppSelector((state: RootState) => state.isAppLoading);
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
   const isXs = useMediaQuery(theme.breakpoints.down('xs'));
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (coordinates.latitude != null && coordinates.longitude != null) {
@@ -43,8 +46,16 @@ const Daily: React.FC = () => {
     }
   }, [coordinates]);
 
+  useEffect(() => {
+    if (isForecastFetching && isLocationFetching) {
+      setIsComponentLoading(true);
+    }
+    if (!isForecastFetching && !isLocationFetching && isComponentLoading) {
+      dispatch(setAppLoading(false));
+    }
+  }, [isForecastFetching, isLocationFetching, isComponentLoading]);
 
-  if (isForecastFetching || isLocationFetching) {
+  if (isAppLoading) {
     return (
       <LoadingIndicator>
         <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">Loading Daily Weather Data...</Typography>

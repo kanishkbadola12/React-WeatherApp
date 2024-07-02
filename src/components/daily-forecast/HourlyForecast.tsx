@@ -33,7 +33,7 @@ const HourlyForecast: React.FC<HourlyForecastProps> = ({
     return (
         <Stack direction="row" alignItems="center" overflow="hidden" flexBasis="70%">
             <Box pr="1rem" onClick={handleScrollLeft}>
-                <ArrowBackIosNewIcon sx={{ fontSize: "4rem", cursor: "pointer" }} />
+                <ArrowBackIosNewIcon sx={{ fontSize: "4rem", cursor: "pointer", color: "#3a506b" }} />
             </Box>
             <Box
                 id="weatherSlider"
@@ -57,7 +57,7 @@ const HourlyForecast: React.FC<HourlyForecastProps> = ({
                 ))}
             </Box>
             <Box pl="1rem" onClick={handleScrollRight}>
-                <ArrowForwardIosIcon sx={{ fontSize: "4rem", cursor: "pointer" }} />
+                <ArrowForwardIosIcon sx={{ fontSize: "4rem", cursor: "pointer", color: "#3a506b" }} />
             </Box>
         </Stack>
     )

@@ -34,7 +34,7 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
                     alignItems="center"
                     gap={1}
                 >
-                    <LocationOnOutlinedIcon sx={{ fontSize: "2rem" }} />
+                    <LocationOnOutlinedIcon sx={{ fontSize: "2rem", color: "#ef233c" }} />
                     <Typography variant="h4">{city}, {countryCode}</Typography>
                 </Box>
                 <Stack
@@ -64,7 +64,7 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
                 gap={1}
                 justifyContent={isSm ? "center" : "end"}
             >
-                <AccessTimeOutlinedIcon />
+                <AccessTimeOutlinedIcon style={{ color: "#3a506b" }} />
                 <Typography>{currentTime}</Typography>
             </Box>
         </Box>

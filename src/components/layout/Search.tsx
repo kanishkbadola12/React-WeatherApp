@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react'
-import { Box, InputAdornment, TextField, useMediaQuery, useTheme } from "@mui/material";
-import { useLazyGetCoordinatesQuery } from '../../services/coordinatesApi';
+import { useRef, useState } from "react";
+import { useLazyGetCoordinatesQuery } from "../../services/coordinatesApi";
 import { useAppDispatch } from '../../hooks/redux';
-import { setCoordinates } from '../../store/coordinatesSlice';
+import { setCoordinates } from "../../store/slices/coordinates";
+import { setAppLoading } from "../../store/slices/appLoading";
+import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
-import { Navigation } from './Navigation';
 
-export const SearchByLocation: React.FC = () => {
+export const Search: React.FC = () => {
     const [
         getCoordinates,
     ] = useLazyGetCoordinatesQuery();
@@ -15,8 +15,6 @@ export const SearchByLocation: React.FC = () => {
     const [helperText, setHelperText] = useState<string>('');
 
     const dispatch = useAppDispatch();
-    const theme = useTheme();
-    const isXs = useMediaQuery(theme.breakpoints.down('xs'));
 
     const validateSearch = () => {
         if (inputRef.current) {
@@ -61,33 +59,28 @@ export const SearchByLocation: React.FC = () => {
                 }
 
                 dispatch(setCoordinates({ latitude, longitude }));
+                dispatch(setAppLoading(true));
             }
         }
     };
 
     return (
-        <Box
-            display="flex"
-            flexDirection={isXs ? "column" : "row"}
-            justifyContent={isXs ? "center" : "space-between"}
-            alignItems={isXs ? "center" : "start"}
-            gap={isXs ? 1.5 : 0}
-            height="4rem"
-        >
-            <Navigation />
-            <TextField
-                error={searchHasError}
-                onChange={validateSearch}
-                onBlur={validateSearchOnBlur}
-                onKeyDown={handleLocationSearch}
-                InputProps={{
-                    startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>
-                }}
-                id="outlined-error"
-                label="Search for places..."
-                inputRef={inputRef}
-                helperText={helperText}
-            />
-        </Box>
+        <TextField
+            error={searchHasError}
+            onChange={validateSearch}
+            onBlur={validateSearchOnBlur}
+            onKeyDown={handleLocationSearch}
+            InputProps={{
+                startAdornment: (
+                    <InputAdornment position="start">
+                        <SearchIcon style={{ color: "#000814" }} />
+                    </InputAdornment>
+                )
+            }}
+            id="outlined-error"
+            label="Search for places..."
+            inputRef={inputRef}
+            helperText={helperText}
+        />
     )
 }
