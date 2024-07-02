@@ -5,7 +5,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react"
 import { SerializedError } from "@reduxjs/toolkit/react"
 
 interface ErrorProps {
-    error: FetchBaseQueryError | SerializedError | string;
+    error: FetchBaseQueryError | SerializedError | string | undefined;
 }
 
 const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError => {
@@ -17,6 +17,8 @@ const isSerializedError = (error: any): error is SerializedError => {
 }
 
 export const Error: React.FC<ErrorProps> = ({ error }) => {
+    if (!error) return 'Unknown Error';
+
     let errorMessage;
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));

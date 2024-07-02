@@ -51,8 +51,15 @@ export const SearchByLocation: React.FC = () => {
             }
 
             const response = await getCoordinates(inputRef.current.value);
+
             if (response.data) {
                 const { latitude, longitude } = response.data;
+                if (latitude === null && longitude === null) {
+                    setHelperText('Please enter a valid location.');
+                    setSearchHasError(true);
+                    return;
+                }
+
                 dispatch(setCoordinates({ latitude, longitude }));
             }
         }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { useAppSelector } from "../hooks/redux";
 import { RootState } from "../store/store";
@@ -32,18 +32,12 @@ const Weekly: React.FC = () => {
 
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
-    const [invalidSearchQuery, setInvalidSearchQuery] = useState(false);
 
     useEffect(() => {
         if (coordinates.latitude != null && coordinates.longitude != null) {
             console.log(coordinates);
             getForecast(coordinates);
             getAirQuality(coordinates);
-            setInvalidSearchQuery(false);
-        } else {
-            if (!isForecastFetching || !isAqiFetching) {
-                setInvalidSearchQuery(true);
-            }
         }
     }, [coordinates]);
 
@@ -55,8 +49,8 @@ const Weekly: React.FC = () => {
         )
     }
 
-    if (forecastHasError || aqiHasError || invalidSearchQuery) {
-        return <Error error={forecastError || aqiError || "Please enter a valid location."} />
+    if (forecastHasError || aqiHasError) {
+        return <Error error={forecastError || aqiError} />
     }
 
     return (weather && aqi &&

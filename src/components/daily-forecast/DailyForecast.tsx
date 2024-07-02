@@ -38,7 +38,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
             gap={4}
         >
             <Stack flexBasis="15%" alignItems="center">
-                <Typography variant="h2">{currentTemperature}{'\u00b0'}</Typography>
+                <Typography variant="h2" marginLeft={isSm ? "30px" : "0"}>{currentTemperature}{'\u00b0'}</Typography>
                 <Stack direction="row" spacing={0.5}>
                     {Object.values(formatDate(date)).map((date, idx) => (
                         <Typography key={idx}>

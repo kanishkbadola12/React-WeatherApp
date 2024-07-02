@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
 import DailyForecastSummary from "../components/daily-forecast/DailySummary";
@@ -31,7 +31,6 @@ const Daily: React.FC = () => {
   ] = useLazyGetGeoLocationQuery();
 
   const coordinates = useAppSelector((state: RootState) => state.coordinates);
-  const [invalidSearchQuery, setInvalidSearchQuery] = useState(false);
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
   const isXs = useMediaQuery(theme.breakpoints.down('xs'));
@@ -41,11 +40,6 @@ const Daily: React.FC = () => {
       console.log(coordinates);
       getForecast(coordinates);
       getLocation(coordinates);
-      setInvalidSearchQuery(false);
-    } else {
-      if (!isForecastFetching || !isLocationFetching) {
-        setInvalidSearchQuery(true);
-      }
     }
   }, [coordinates]);
 
@@ -58,8 +52,8 @@ const Daily: React.FC = () => {
     )
   }
 
-  if (forecastHasError || locationHasError || invalidSearchQuery) {
-    return <Error error={locationError || forecastError || "Please enter a valid location."} />
+  if (forecastHasError || locationHasError) {
+    return <Error error={locationError || forecastError} />
   }
 
   return (
