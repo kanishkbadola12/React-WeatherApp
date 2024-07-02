@@ -20,9 +20,13 @@ export interface WeeklyConditions {
     }
 }
 
-export interface LocationResponse {
+export interface Address {
     city: string;
-    countryCode: string
+    country_code: string
+}
+
+export interface LocationResponse {
+    address: Address
 }
 
 export interface GeoLocationResponse {

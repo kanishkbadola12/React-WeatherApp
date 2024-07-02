@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Stack, useMediaQuery, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
 import DailyForecastSummary from "../components/daily-forecast/DailySummary";
 import HourlyForecast from "../components/daily-forecast/HourlyForecast";
@@ -7,23 +7,63 @@ import { useAppSelector } from "../hooks/redux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
 import { useLazyGetGeoLocationQuery } from "../services/geoLocationApi";
+import { LoadingIndicator } from "../components/ui/LoadingIndicator";
+import { Error } from "../components/ui/Error";
 
 const Daily: React.FC = () => {
+  const [
+    getForecast,
+    {
+      data: weather,
+      isFetching: isForecastFetching,
+      isError: forecastHasError,
+      error: forecastError
+    }
+  ] = useLazyGetForecastQuery();
+  const [
+    getLocation,
+    {
+      data: geoLocation,
+      isFetching: isLocationFetching,
+      isError: locationHasError,
+      error: locationError
+    }
+  ] = useLazyGetGeoLocationQuery();
+
   const coordinates = useAppSelector((state: RootState) => state.coordinates);
-  const [getForecast, { data: weather }] = useLazyGetForecastQuery();
-  const [getLocation, { data: geoLocation }] = useLazyGetGeoLocationQuery();
+  const [invalidSearchQuery, setInvalidSearchQuery] = useState(false);
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
+  const isXs = useMediaQuery(theme.breakpoints.down('xs'));
 
   useEffect(() => {
-    console.log(coordinates);
     if (coordinates.latitude != null && coordinates.longitude != null) {
+      console.log(coordinates);
       getForecast(coordinates);
       getLocation(coordinates);
+      setInvalidSearchQuery(false);
+    } else {
+      if (!isForecastFetching || !isLocationFetching) {
+        setInvalidSearchQuery(true);
+      }
     }
   }, [coordinates]);
 
-  return (weather && geoLocation &&
+
+  if (isForecastFetching || isLocationFetching) {
+    return (
+      <LoadingIndicator>
+        <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">Loading Daily Weather Data...</Typography>
+      </LoadingIndicator>
+    )
+  }
+
+  if (forecastHasError || locationHasError || invalidSearchQuery) {
+    return <Error error={locationError || forecastError || "Please enter a valid location."} />
+  }
+
+  return (
+    weather && geoLocation &&
     <Stack gap={6}>
       <Stack direction={isMd ? "column" : "row"} gap={4}>
         <DailyForecast
@@ -42,7 +82,7 @@ const Daily: React.FC = () => {
       </Stack>
       <DailyForecastSummary
         city={geoLocation.city}
-        countryCode={geoLocation.countryCode}
+        countryCode={geoLocation.country_code.toUpperCase()}
         rain={weather.rain}
         windSpeed={weather.windSpeed}
         feelsLike={weather.feelsLike}

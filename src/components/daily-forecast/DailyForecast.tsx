@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import React from "react";
+import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { mapUnitsToWeather } from "../../utils/mapUnitsToWeather";
 
 interface DailyForecastProps {
@@ -25,12 +25,18 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
     currentCloudCover,
     chancesOfRain
 }) => {
-    const { icon, condition } = useMemo(() => {
-        return mapUnitsToWeather(currentCloudCover, chancesOfRain)
-    }, [currentCloudCover, chancesOfRain]);
+    const { icon, condition } = mapUnitsToWeather(currentCloudCover, chancesOfRain);
+
+    const theme = useTheme();
+    const isSm = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <>
+        <Box
+            display="flex"
+            flexDirection={isSm ? "column" : "row"}
+            justifyContent="center"
+            gap={4}
+        >
             <Stack flexBasis="15%" alignItems="center">
                 <Typography variant="h2">{currentTemperature}{'\u00b0'}</Typography>
                 <Stack direction="row" spacing={0.5}>
@@ -45,7 +51,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
                 <Box display="flex" fontSize="4.5rem">{icon}</Box>
                 <Typography variant="caption">{condition}</Typography>
             </Stack>
-        </>
+        </Box>
     )
 };
 

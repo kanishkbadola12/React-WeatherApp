@@ -1,6 +1,5 @@
-import { Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { mapDaysToWeather } from "../../utils/mapDaysToWeather";
-import { useMemo } from "react";
 import { WeeklyConditions } from "../../types/weatherType";
 
 interface WeeklyForecastProps {
@@ -11,12 +10,17 @@ interface WeeklyForecastProps {
 }
 
 export const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ hourlyTime, hourlyTemperature, hourlyCloudCover, hourlyChancesOfRain }) => {
-    const weeklyForecast: Record<string, WeeklyConditions> = useMemo(() => {
-        return mapDaysToWeather(hourlyTime, hourlyTemperature, hourlyCloudCover, hourlyChancesOfRain);
-    }, [hourlyTime, hourlyTemperature, hourlyCloudCover, hourlyChancesOfRain]);
+    const weeklyForecast: Record<string, WeeklyConditions> = mapDaysToWeather(hourlyTime, hourlyTemperature, hourlyCloudCover, hourlyChancesOfRain);
+    const theme = useTheme();
+    const isSm = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
-        <Grid container rowSpacing={2} columnSpacing={2}>
+        <Grid
+            container
+            rowSpacing={2}
+            columnSpacing={2}
+            justifyContent={isSm ? "center" : "start"}
+        >
             {Object.entries(weeklyForecast).map(([day, forecast], idx) => (
                 <Grid item key={idx}>
                     <Card>

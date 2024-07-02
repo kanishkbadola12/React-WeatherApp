@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Grid, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import WbTwilightIcon from '@mui/icons-material/WbTwilight';
 import { ProgressCard } from "../ui/ProgressCard";
@@ -22,10 +22,18 @@ export const Highlights: React.FC<HighlightsProps> = ({
     visibility,
     aqi
 }) => {
+    const theme = useTheme();
+    const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+
     return (
         <Stack>
             <Typography mb={3} variant="h5">Today's Highlights</Typography>
-            <Grid container rowSpacing={2} columnSpacing={2}>
+            <Grid
+                container
+                rowSpacing={2}
+                columnSpacing={2}
+                justifyContent={isSm ? "center" : "start"}
+            >
                 <Grid item>
                     <ProgressCard value={aqi}>
                         <Typography variant="caption">AQI</Typography>

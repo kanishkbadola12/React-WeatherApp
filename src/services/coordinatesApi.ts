@@ -7,7 +7,12 @@ const coordinatesApi = createApi({
     endpoints: (builder) => ({
         getCoordinates: builder.query<Coordinates, string>({
             query: location => `search?name=${location}&count=1&language=en&format=json`,
-            transformResponse: (response: GeoLocationResponse) => response.results[0]
+            transformResponse: (response: GeoLocationResponse) => {
+                if (response.results) {
+                    return response.results[0]
+                }
+                return { latitude: null, longitude: null };
+            }
         }),
     })
 });

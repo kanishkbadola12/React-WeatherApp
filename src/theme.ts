@@ -12,7 +12,7 @@ export const customTheme = createTheme({
     },
     breakpoints: {
         values: {
-            xs: 0,
+            xs: 500,
             sm: 600,
             md: 900,
             lg: 1200,
