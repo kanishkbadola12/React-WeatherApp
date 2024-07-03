@@ -8,10 +8,9 @@ import { Highlights } from "../components/weekly-forecast/Highlights";
 import { useLazyGetAirQualityQuery } from "../services/airQualityApi";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { Error } from "../components/ui/Error";
-import { setAppLoading } from "../store/slices/appLoading";
+import { setAppHasError, setIsAppLoading, setSelectedTab } from "../store/slices/appState";
 
 const Weekly: React.FC = () => {
-    const coordinates = useAppSelector((state: RootState) => state.coordinates);
     const [
         getForecast,
         {
@@ -30,10 +29,11 @@ const Weekly: React.FC = () => {
             error: aqiError
         }
     ] = useLazyGetAirQualityQuery();
-    const [isComponentLoading, setIsComponentLoading] = useState(false);
+    const [isComponentLoading, setIsComponentLoading] = useState(true);
+    const { isAppLoading, appHasErrors } = useAppSelector((state: RootState) => state.appState);
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
-    const { isAppLoading } = useAppSelector((state: RootState) => state.isAppLoading);
+    const coordinates = useAppSelector((state: RootState) => state.coordinates);
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -46,12 +46,19 @@ const Weekly: React.FC = () => {
 
     useEffect(() => {
         if (isForecastFetching && isAqiFetching) {
-            setIsComponentLoading(true);
+            setIsComponentLoading(false);
         }
-        if (!isForecastFetching && !isAqiFetching && isComponentLoading) {
-            dispatch(setAppLoading(false));
+        if (!isForecastFetching && !isAqiFetching && !isComponentLoading) {
+            dispatch(setIsAppLoading(false));
+            dispatch(setSelectedTab('week'));
         }
     }, [isForecastFetching, isAqiFetching, isComponentLoading]);
+
+    useEffect(() => {
+        if (forecastHasError || aqiHasError) {
+            dispatch(setAppHasError(true));
+        }
+    }, [forecastHasError, aqiHasError]);
 
     if (isAppLoading) {
         return (
@@ -61,7 +68,7 @@ const Weekly: React.FC = () => {
         )
     }
 
-    if (forecastHasError || aqiHasError) {
+    if (appHasErrors) {
         return <Error error={forecastError || aqiError} />
     }
 

@@ -5,12 +5,12 @@ import geoLocationApi from "../services/geoLocationApi";
 import forecastApi from "../services/forecastApi";
 import coordinatesSlice from "./slices/coordinates";
 import airQualityApi from "../services/airQualityApi";
-import isAppLoadingSlice from "./slices/appLoading";
+import appStateSlice from "./slices/appState";
 
 export const store = configureStore({
     reducer: {
         coordinates: coordinatesSlice,
-        isAppLoading: isAppLoadingSlice,
+        appState: appStateSlice,
         [coordinatesApi.reducerPath]: coordinatesApi.reducer,
         [forecastApi.reducerPath]: forecastApi.reducer,
         [geoLocationApi.reducerPath]: geoLocationApi.reducer,

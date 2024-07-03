@@ -9,7 +9,7 @@ import { useLazyGetForecastQuery } from "../services/forecastApi";
 import { useLazyGetGeoLocationQuery } from "../services/geoLocationApi";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { Error } from "../components/ui/Error";
-import { setAppLoading } from "../store/slices/appLoading";
+import { setAppHasError, setIsAppLoading, setSelectedTab } from "../store/slices/appState";
 
 const Daily: React.FC = () => {
   const [
@@ -30,9 +30,9 @@ const Daily: React.FC = () => {
       error: locationError
     }
   ] = useLazyGetGeoLocationQuery();
-  const [isComponentLoading, setIsComponentLoading] = useState(false);
+  const [isComponentLoading, setIsComponentLoading] = useState(true);
+  const { isAppLoading, appHasErrors } = useAppSelector((state: RootState) => state.appState);
   const coordinates = useAppSelector((state: RootState) => state.coordinates);
-  const { isAppLoading } = useAppSelector((state: RootState) => state.isAppLoading);
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
   const isXs = useMediaQuery(theme.breakpoints.down('xs'));
@@ -48,12 +48,19 @@ const Daily: React.FC = () => {
 
   useEffect(() => {
     if (isForecastFetching && isLocationFetching) {
-      setIsComponentLoading(true);
+      setIsComponentLoading(false);
     }
-    if (!isForecastFetching && !isLocationFetching && isComponentLoading) {
-      dispatch(setAppLoading(false));
+    if (!isForecastFetching && !isLocationFetching && !isComponentLoading) {
+      dispatch(setIsAppLoading(false));
+      dispatch(setSelectedTab('today'));
     }
   }, [isForecastFetching, isLocationFetching, isComponentLoading]);
+
+  useEffect(() => {
+    if (forecastHasError || locationHasError) {
+      dispatch(setAppHasError(true));
+    }
+  }, [forecastHasError, locationHasError]);
 
   if (isAppLoading) {
     return (
@@ -63,14 +70,14 @@ const Daily: React.FC = () => {
     )
   }
 
-  if (forecastHasError || locationHasError) {
+  if (appHasErrors) {
     return <Error error={locationError || forecastError} />
   }
 
   return (
     weather && geoLocation &&
     <Stack gap={6}>
-      <Stack direction={isMd ? "column" : "row"} gap={4}>
+      <Stack direction={isMd ? "column" : "row"} gap={7}>
         <DailyForecast
           currentTemperature={weather.currentTemperature}
           date={weather.date}

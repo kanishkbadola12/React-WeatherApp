@@ -2,14 +2,12 @@ import { useRef, useState } from "react";
 import { useLazyGetCoordinatesQuery } from "../../services/coordinatesApi";
 import { useAppDispatch } from '../../hooks/redux';
 import { setCoordinates } from "../../store/slices/coordinates";
-import { setAppLoading } from "../../store/slices/appLoading";
+import { setIsAppLoading } from "../../store/slices/appState";
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 
 export const Search: React.FC = () => {
-    const [
-        getCoordinates,
-    ] = useLazyGetCoordinatesQuery();
+    const [getCoordinates] = useLazyGetCoordinatesQuery();
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [searchHasError, setSearchHasError] = useState<boolean>(false);
     const [helperText, setHelperText] = useState<string>('');
@@ -59,7 +57,7 @@ export const Search: React.FC = () => {
                 }
 
                 dispatch(setCoordinates({ latitude, longitude }));
-                dispatch(setAppLoading(true));
+                dispatch(setIsAppLoading(true));
             }
         }
     };

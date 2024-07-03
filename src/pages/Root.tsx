@@ -13,7 +13,7 @@ const RootLayout = () => {
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
     const [locationError, setLocationError] = useState("");
-    const { isAppLoading } = useAppSelector((state: RootState) => state.isAppLoading);
+    const { isAppLoading, appHasErrors } = useAppSelector((state: RootState) => state.appState);
 
     useEffect(() => {
         if ("geolocation" in navigator) {
@@ -37,9 +37,9 @@ const RootLayout = () => {
 
     return (
         <Container sx={{ display: "flex", flexDirection: "column", gap: isXs ? 6 : 4, mt: 4 }}>
-            <Header />
+            {!appHasErrors && <Header />}
             <Outlet />
-            {!isAppLoading && <Footer />}
+            {!isAppLoading && !appHasErrors && <Footer />}
         </Container>
     )
 }

@@ -35,7 +35,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({
             display="flex"
             flexDirection={isSm ? "column" : "row"}
             justifyContent="center"
-            gap={4}
+            gap={5}
         >
             <Stack flexBasis="15%" alignItems="center">
                 <Typography variant="h2" marginLeft={isSm ? "30px" : "0"}>{currentTemperature}{'\u00b0'}</Typography>

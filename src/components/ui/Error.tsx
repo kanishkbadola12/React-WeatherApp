@@ -1,27 +1,43 @@
 import { faEarthAmericas, faWifi } from "@fortawesome/free-solid-svg-icons"
+import { faOtter } from "@fortawesome/free-solid-svg-icons/faOtter"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
+import { Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react"
 import { SerializedError } from "@reduxjs/toolkit/react"
+import { useNavigate } from "react-router-dom"
+
+type errorType = FetchBaseQueryError | SerializedError | string | undefined;
 
 interface ErrorProps {
-    error: FetchBaseQueryError | SerializedError | string | undefined;
+    error: errorType;
 }
 
-const isFetchBaseQueryError = (error: any): error is FetchBaseQueryError => {
-    return error && typeof error === 'object' && 'status' in error;
+const isFetchBaseQueryError = (error?: errorType): error is FetchBaseQueryError => {
+    return error !== undefined && typeof error === 'object' && 'status' in error;
 }
 
-const isSerializedError = (error: any): error is SerializedError => {
-    return error && typeof error === 'object' && 'message' in error;
+const isSerializedError = (error: errorType): error is SerializedError => {
+    return error !== undefined && typeof error === 'object' && 'message' in error;
+}
+
+const isRouteError = (error: errorType): error is SerializedError => {
+    return error !== undefined && typeof error === 'string' && error === '404';
 }
 
 export const Error: React.FC<ErrorProps> = ({ error }) => {
     if (!error) return 'Unknown Error';
 
-    let errorMessage;
+    let errorMessage = '';
+    let color = '#ef233c';
+    let icon = faWifi;
     const theme = useTheme();
+    const navigate = useNavigate();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
+    const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const handleErrorState = (error: string | object) => {
+        isRouteError(error) ? navigate('..') : location.reload();
+    }
 
     if (error) {
         if (isFetchBaseQueryError(error)) {
@@ -34,27 +50,43 @@ export const Error: React.FC<ErrorProps> = ({ error }) => {
             errorMessage = error.message || 'Unknown Error';
         } else {
             errorMessage = error;
+            if (error === '404') {
+                errorMessage = 'Oh snap! 404...';
+                color = '#ca6702';
+                icon = faOtter;
+            } else {
+                color = '#7ae582';
+                icon = faEarthAmericas
+            }
         }
     }
 
     return (
-        <Stack alignItems="center" gap={1} textAlign="center"
+        <Stack
+            alignItems="center"
+            textAlign="center"
             style={{
                 position: "absolute",
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)"
             }}>
-            {typeof error === "string" ? (
-                <FontAwesomeIcon style={{ fontSize: "5rem", color: "#38b000" }} icon={faEarthAmericas} />
-            ) : (
-                <FontAwesomeIcon style={{ fontSize: "5rem", color: "#ef233c" }} icon={faWifi} />
-            )}
-            <Typography variant={isXs ? "h6" : "h5"} color="textSecondary">
+            <FontAwesomeIcon style={{ fontSize: isSm ? "7rem" : "10rem", color: color }} icon={icon} />
+            <Typography
+                width="90vw"
+                variant="overline"
+                color="textSecondary"
+                fontSize={isXs ? "1.25rem" : isSm ? "1.5rem" : "2rem"}
+            >
                 {errorMessage}
             </Typography>
-            <Typography variant={isXs ? "h6" : "h5"} color="textSecondary">
-            </Typography>
+            <Button
+                variant="contained"
+                style={{ background: '#219ebc' }}
+                onClick={() => handleErrorState(error)}
+            >
+                {isRouteError(error) ? 'Go back to home' : 'Refresh'}
+            </Button>
         </Stack>
     )
 } 
