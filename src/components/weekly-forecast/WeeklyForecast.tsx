@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Grid, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { mapDaysToWeather } from "../../utils/mapDaysToWeather";
 import { WeeklyConditions } from "../../types/weatherType";
+import { useTranslation } from "react-i18next";
 
 interface WeeklyForecastProps {
     hourlyTime: string[];
@@ -13,6 +14,7 @@ export const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ hourlyTime, hour
     const weeklyForecast: Record<string, WeeklyConditions> = mapDaysToWeather(hourlyTime, hourlyTemperature, hourlyCloudCover, hourlyChancesOfRain);
     const theme = useTheme();
     const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+    const { t } = useTranslation();
 
     return (
         <Grid
@@ -25,10 +27,10 @@ export const WeeklyForecast: React.FC<WeeklyForecastProps> = ({ hourlyTime, hour
                 <Grid item key={idx}>
                     <Card>
                         <CardContent>
-                            <Typography>{day}</Typography>
+                            <Typography>{t(day)}</Typography>
                             <Stack alignItems="center" gap="4px">
                                 <Box fontSize="3rem">{forecast.weather.icon}</Box>
-                                <Typography variant="caption">{forecast.weather.condition}</Typography>
+                                <Typography variant="caption">{t(forecast.weather.condition)}</Typography>
                             </Stack>
                             <Box display="flex" gap={2}>
                                 <Box display="flex" alignItems="end" gap="2px">

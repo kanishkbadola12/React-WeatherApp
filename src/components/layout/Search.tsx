@@ -1,18 +1,32 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLazyGetCoordinatesQuery } from "../../services/coordinatesApi";
 import { useAppDispatch } from '../../hooks/redux';
 import { setCoordinates } from "../../store/slices/coordinates";
-import { setIsAppLoading } from "../../store/slices/appState";
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from "react-i18next";
+import { useLazyGetGeoLocationQuery } from "../../services/geoLocationApi";
+import { setCurrentLocale } from "../../store/slices/appState";
 
 export const Search: React.FC = () => {
-    const [getCoordinates] = useLazyGetCoordinatesQuery();
+    const [
+        getCoordinates,
+        {
+            data: coordinates,
+            isError: CoordinatesHasError,
+        }
+    ] = useLazyGetCoordinatesQuery();
+    const [
+        getLocation,
+        {
+            data: geoLocation
+        }
+    ] = useLazyGetGeoLocationQuery();
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [searchHasError, setSearchHasError] = useState<boolean>(false);
     const [helperText, setHelperText] = useState<string>('');
-
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     const validateSearch = () => {
         if (inputRef.current) {
@@ -46,21 +60,25 @@ export const Search: React.FC = () => {
                 return;
             }
 
-            const response = await getCoordinates(inputRef.current.value);
-
-            if (response.data) {
-                const { latitude, longitude } = response.data;
-                if (latitude === null && longitude === null) {
-                    setHelperText('Please enter a valid location.');
-                    setSearchHasError(true);
-                    return;
-                }
-
-                dispatch(setCoordinates({ latitude, longitude }));
-                dispatch(setIsAppLoading(true));
-            }
+            getCoordinates(inputRef.current.value);
         }
     };
+
+    useEffect(() => {
+        if (coordinates) {
+            const { latitude, longitude } = coordinates;
+
+            if ((latitude === null && longitude === null) || CoordinatesHasError) {
+                setHelperText('Please enter a valid location.');
+                setSearchHasError(true);
+                return;
+            }
+
+            dispatch(setCoordinates({ latitude, longitude }));
+            getLocation(coordinates);
+            dispatch(setCurrentLocale(geoLocation?.country_code || "en"))
+        }
+    }, [coordinates, geoLocation]);
 
     return (
         <TextField
@@ -76,7 +94,7 @@ export const Search: React.FC = () => {
                 )
             }}
             id="outlined-error"
-            label="Search for places..."
+            label={t('Search for places')}
             inputRef={inputRef}
             helperText={helperText}
         />

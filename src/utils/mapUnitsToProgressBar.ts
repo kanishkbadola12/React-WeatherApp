@@ -1,5 +1,6 @@
 import { CircularProgressProps } from "@mui/material";
 import { WeatherFactors } from "../types/weatherType";
+import { useTranslation } from "react-i18next";
 
 interface ProgressCardValue {
     progress: number;
@@ -13,7 +14,7 @@ interface range {
 };
 
 const getAqiProgress = (value: number): ProgressCardValue => {
-    const valuePercentage = Math.round((value / 505) * 100)
+    const valuePercentage = Math.round((value / 505) * 100);
     const aqiRanges: range[] = [
         { min: 0, max: 56, data: { progress: valuePercentage, color: 'success' } },
         { min: 56, max: 256, data: { progress: valuePercentage, color: 'success' } },
@@ -84,16 +85,18 @@ const getVisibilityProgress = (value: number): ProgressCardValue => {
 }
 
 export const mapUnitsToProgressBar = (value: number, factor: WeatherFactors): ProgressCardValue => {
+    const { t } = useTranslation();
+
     switch (true) {
-        case factor === 'AQI':
+        case factor === t('AQI'):
             return getAqiProgress(value);
-        case factor === 'UV Index':
+        case factor === t('UV Index'):
             return getUVProgress(value);
-        case factor === 'Wind Speed':
+        case factor === t('Wind Speed'):
             return getWindProgress(value);
-        case factor === 'Humidity':
+        case factor === t('Humidity'):
             return getHumidityProgress(value);
-        case factor === 'Visibility':
+        case factor === t('Visibility'):
             return getVisibilityProgress(value);
         default:
             return { progress: 0, color: 'inherit' };

@@ -2,6 +2,7 @@ import { Box, Card, CardContent, Grid, Stack, Typography, useMediaQuery, useThem
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import WbTwilightIcon from '@mui/icons-material/WbTwilight';
 import { ProgressCard } from "../ui/ProgressCard";
+import { useTranslation } from "react-i18next";
 
 interface HighlightsProps {
     uvIndex: number;
@@ -24,10 +25,11 @@ export const Highlights: React.FC<HighlightsProps> = ({
 }) => {
     const theme = useTheme();
     const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+    const { t } = useTranslation();
 
     return (
         <Stack>
-            <Typography mb={3} variant="h5">Today's Highlights</Typography>
+            <Typography mb={3} variant="h5">{t("Today's Highlights")}</Typography>
             <Grid
                 container
                 rowSpacing={2}
@@ -36,33 +38,33 @@ export const Highlights: React.FC<HighlightsProps> = ({
             >
                 <Grid item>
                     <ProgressCard value={aqi}>
-                        <Typography variant="caption">AQI</Typography>
+                        <Typography variant="caption">{t('AQI')}</Typography>
                     </ProgressCard>
                 </Grid>
                 <Grid item>
                     <ProgressCard value={uvIndex}>
-                        <Typography variant="caption">UV Index</Typography>
+                        <Typography variant="caption">{t('UV Index')}</Typography>
                     </ProgressCard>
                 </Grid>
                 <Grid item>
-                    <ProgressCard value={windSpeed} unit="km/h">
-                        <Typography variant="caption">Wind Speed</Typography>
+                    <ProgressCard value={windSpeed} unit={t("km/h")}>
+                        <Typography variant="caption">{t('Wind Speed')}</Typography>
                     </ProgressCard>
                 </Grid>
                 <Grid item>
                     <ProgressCard value={humidity} unit="%">
-                        <Typography variant="caption">Humidity</Typography>
+                        <Typography variant="caption">{t('Humidity')}</Typography>
                     </ProgressCard>
                 </Grid>
                 <Grid item>
-                    <ProgressCard value={visibility} unit="km">
-                        <Typography variant="caption">Visibility</Typography>
+                    <ProgressCard value={visibility} unit={t("km")}>
+                        <Typography variant="caption">{t('Visibility')}</Typography>
                     </ProgressCard>
                 </Grid>
                 <Grid item>
                     <Card>
                         <CardContent>
-                            <Typography variant="caption">Sunrise & Sunset</Typography>
+                            <Typography variant="caption">{t('Sunrise & Sunset')}</Typography>
                             <Box display="flex" flexDirection="column" gap={1}>
                                 <Box display="flex" gap={1}>
                                     <WbSunnyIcon style={{ alignSelf: "end", paddingBottom: "6px", color: "#ffd60a" }} />

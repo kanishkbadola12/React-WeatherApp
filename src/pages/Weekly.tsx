@@ -9,6 +9,7 @@ import { useLazyGetAirQualityQuery } from "../services/airQualityApi";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { Error } from "../components/ui/Error";
 import { setAppHasError, setIsAppLoading, setSelectedTab } from "../store/slices/appState";
+import { useTranslation } from "react-i18next";
 
 const Weekly: React.FC = () => {
     const [
@@ -35,6 +36,7 @@ const Weekly: React.FC = () => {
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
     const coordinates = useAppSelector((state: RootState) => state.coordinates);
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (coordinates.latitude != null && coordinates.longitude != null) {
@@ -63,7 +65,7 @@ const Weekly: React.FC = () => {
     if (isAppLoading) {
         return (
             <LoadingIndicator>
-                <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">Loading Weekly Weather Data...</Typography>
+                <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">{t('Loading Weekly Weather Data')}</Typography>
             </LoadingIndicator>
         )
     }

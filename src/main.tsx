@@ -6,6 +6,7 @@ import { store } from './store/store.ts';
 import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { customTheme } from './theme.ts';
+import './i18n/index.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

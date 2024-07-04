@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import { useTranslation } from "react-i18next";
 
 interface DailyForecastSummaryProps {
     city: string;
@@ -25,6 +26,7 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
 }) => {
     const theme = useTheme();
     const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+    const { t } = useTranslation();
 
     return (
         <Box>
@@ -43,14 +45,14 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
                     paddingLeft="30px"
                 >
                     <Stack gap={1}>
-                        <Typography>Chances of Rain</Typography>
-                        <Typography>Wind</Typography>
-                        <Typography>Feels Like</Typography>
-                        <Typography>Humidity</Typography>
+                        <Typography>{t('Chances of Rain')}</Typography>
+                        <Typography>{t('Wind')}</Typography>
+                        <Typography>{t('Feels Like')}</Typography>
+                        <Typography>{t('Humidity')}</Typography>
                     </Stack>
                     <Stack gap={1}>
                         <Typography>{chancesOfRain} %</Typography>
-                        <Typography>{windSpeed} km/h</Typography>
+                        <Typography>{windSpeed}{t('km/h')}</Typography>
                         <Typography>{feelsLike}{'\u00b0'}</Typography>
                         <Typography>{humidity}%</Typography>
                     </Stack>

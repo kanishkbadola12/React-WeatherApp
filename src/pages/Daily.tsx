@@ -10,6 +10,7 @@ import { useLazyGetGeoLocationQuery } from "../services/geoLocationApi";
 import { LoadingIndicator } from "../components/ui/LoadingIndicator";
 import { Error } from "../components/ui/Error";
 import { setAppHasError, setIsAppLoading, setSelectedTab } from "../store/slices/appState";
+import { useTranslation } from "react-i18next";
 
 const Daily: React.FC = () => {
   const [
@@ -37,6 +38,7 @@ const Daily: React.FC = () => {
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
   const isXs = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (coordinates.latitude != null && coordinates.longitude != null) {
@@ -65,7 +67,7 @@ const Daily: React.FC = () => {
   if (isAppLoading) {
     return (
       <LoadingIndicator>
-        <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">Loading Daily Weather Data...</Typography>
+        <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">{t('Loading Daily Weather Data')}</Typography>
       </LoadingIndicator>
     )
   }

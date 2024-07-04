@@ -9,7 +9,10 @@ const coordinatesApi = createApi({
             query: location => `search?name=${location}&count=1&language=en&format=json`,
             transformResponse: (response: GeoLocationResponse) => {
                 if (response.results) {
-                    return response.results[0]
+                    return {
+                        latitude: response.results[0].latitude,
+                        longitude: response.results[0].longitude
+                    }
                 }
                 return { latitude: null, longitude: null };
             }

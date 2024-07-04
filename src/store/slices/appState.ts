@@ -3,7 +3,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isAppLoading: true,
     appHasErrors: false,
-    selectedTab: 'today'
+    selectedTab: 'today',
+    currentLocale: 'en'
 }
 
 const appStateSlice = createSlice({
@@ -18,9 +19,18 @@ const appStateSlice = createSlice({
         },
         setSelectedTab(state, action: PayloadAction<string>) {
             state.selectedTab = action.payload;
+        },
+        setCurrentLocale(state, action: PayloadAction<string>) {
+            state.currentLocale = action.payload;
         }
     }
 });
 
-export const { setIsAppLoading, setAppHasError, setSelectedTab } = appStateSlice.actions;
+export const {
+    setIsAppLoading,
+    setAppHasError,
+    setSelectedTab,
+    setCurrentLocale
+} = appStateSlice.actions;
+
 export default appStateSlice.reducer;
