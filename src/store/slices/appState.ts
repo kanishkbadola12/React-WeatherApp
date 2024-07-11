@@ -1,8 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { AppState, errorType } from "../../types/weatherType";
 
-const initialState = {
-    isAppLoading: true,
-    appHasErrors: false,
+const initialState: AppState = {
+    isAppLoading: false,
+    loadingText: '',
+    appHasError: false,
+    errorText: '',
     selectedTab: 'today',
     currentLocale: 'en'
 }
@@ -14,8 +17,14 @@ const appStateSlice = createSlice({
         setIsAppLoading(state, action: PayloadAction<boolean>) {
             state.isAppLoading = action.payload;
         },
+        setLoadingText(state, action: PayloadAction<string>) {
+            state.loadingText = action.payload;
+        },
         setAppHasError(state, action: PayloadAction<boolean>) {
-            state.appHasErrors = action.payload;
+            state.appHasError = action.payload;
+        },
+        setErrorText(state, action: PayloadAction<errorType>) {
+            state.errorText = action.payload;
         },
         setSelectedTab(state, action: PayloadAction<string>) {
             state.selectedTab = action.payload;
@@ -28,7 +37,9 @@ const appStateSlice = createSlice({
 
 export const {
     setIsAppLoading,
+    setLoadingText,
     setAppHasError,
+    setErrorText,
     setSelectedTab,
     setCurrentLocale
 } = appStateSlice.actions;

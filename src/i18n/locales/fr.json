@@ -37,5 +37,11 @@
     "UV Index": "Indice UV",
     "Wind Speed": "Vitesse du vent",
     "Visibility": "Visibilité",
-    "Sunrise & Sunset": "Lever & coucher du soleil"
+    "Sunrise & Sunset": "Lever & coucher du soleil",
+    "Fetching Location": "Récupération de l'emplacement...",
+    "Network error: Failed to fetch.": "Erreur réseau : échec de la récupération.",
+    "Unknown Error": "Erreur inconnue",
+    "Oh snap! 404": "Oh claquement! 404...",
+    "Go back to home": "Retourne à la maison",
+    "Refresh": "Rafraîchir"
 }

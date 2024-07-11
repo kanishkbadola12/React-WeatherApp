@@ -1,11 +1,11 @@
 import { Box, FormControlLabel, Switch, Tab, Tabs, useTheme } from "@mui/material"
 import { useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { setIsAppLoading, setSelectedTab } from "../../store/slices/appState";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
+import { setSelectedTab } from "../../store/slices/appState";
 import { RootState } from "../../store/store";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const Navigation: React.FC = () => {
     const { selectedTab, currentLocale } = useAppSelector((state: RootState) => state.appState);
@@ -15,6 +15,7 @@ export const Navigation: React.FC = () => {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const [checked, setChecked] = useState(false);
+    const supportedLocales = ['de', 'fr'];
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(prevVal => {
@@ -32,14 +33,7 @@ export const Navigation: React.FC = () => {
             navigate('..');
             dispatch(setSelectedTab('today'));
         }
-        dispatch(setIsAppLoading(true));
     }
-
-    useEffect(() => {
-        setChecked(false);
-        i18n.changeLanguage('en');
-    }, [currentLocale]);
-
 
     return (
         <Box display="flex" alignItems="center" gap={2}>
@@ -57,7 +51,7 @@ export const Navigation: React.FC = () => {
                     />
                 </Tabs>
             </Box>
-            {(currentLocale === 'de' || currentLocale === 'fr') &&
+            {supportedLocales.indexOf(currentLocale) !== -1 &&
                 (<FormControlLabel
                     control={
                         <Switch

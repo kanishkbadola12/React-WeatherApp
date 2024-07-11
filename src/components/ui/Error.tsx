@@ -2,11 +2,11 @@ import { faEarthAmericas, faWifi } from "@fortawesome/free-solid-svg-icons"
 import { faOtter } from "@fortawesome/free-solid-svg-icons/faOtter"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Stack, Typography, useMediaQuery, useTheme } from "@mui/material"
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react"
-import { SerializedError } from "@reduxjs/toolkit/react"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-
-type errorType = FetchBaseQueryError | SerializedError | string | undefined;
+import { errorType } from "../../types/weatherType"
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import { SerializedError } from "@reduxjs/toolkit/react";
 
 interface ErrorProps {
     error: errorType;
@@ -32,8 +32,8 @@ export const Error: React.FC<ErrorProps> = ({ error }) => {
     let icon = faWifi;
     const theme = useTheme();
     const navigate = useNavigate();
-    const isXs = useMediaQuery(theme.breakpoints.down('xs'));
     const isSm = useMediaQuery(theme.breakpoints.down('sm'));
+    const { t } = useTranslation();
 
     const handleErrorState = (error: string | object) => {
         isRouteError(error) ? navigate('..') : location.reload();
@@ -42,16 +42,16 @@ export const Error: React.FC<ErrorProps> = ({ error }) => {
     if (error) {
         if (isFetchBaseQueryError(error)) {
             if (error.status === 'FETCH_ERROR') {
-                errorMessage = 'Network error: Failed to fetch.';
+                errorMessage = t('Network error: Failed to fetch.');
             } else {
                 errorMessage = `Error: ${error.data || error.status}`;
             }
         } else if (isSerializedError(error)) {
-            errorMessage = error.message || 'Unknown Error';
+            errorMessage = error.message || t('Unknown Error');
         } else {
             errorMessage = error;
             if (error === '404') {
-                errorMessage = 'Oh snap! 404...';
+                errorMessage = t('Oh snap! 404');
                 color = '#ca6702';
                 icon = faOtter;
             } else {
@@ -63,29 +63,28 @@ export const Error: React.FC<ErrorProps> = ({ error }) => {
 
     return (
         <Stack
+            display="flex"
             alignItems="center"
+            justifyContent="center"
             textAlign="center"
-            style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)"
-            }}>
-            <FontAwesomeIcon style={{ fontSize: isSm ? "7rem" : "10rem", color: color }} icon={icon} />
+            height="70vh"
+        >
+            <FontAwesomeIcon fontSize="7rem" style={{ color: color, marginBottom: "16px" }} icon={icon} />
             <Typography
                 width="90vw"
                 variant="overline"
                 color="textSecondary"
-                fontSize={isXs ? "1.25rem" : isSm ? "1.5rem" : "2rem"}
+                lineHeight="32px"
+                fontSize={isSm ? "1.25rem" : "1.5rem"}
             >
                 {errorMessage}
             </Typography>
             <Button
                 variant="contained"
-                style={{ background: '#219ebc' }}
+                style={{ background: '#219ebc', marginTop: "16px" }}
                 onClick={() => handleErrorState(error)}
             >
-                {isRouteError(error) ? 'Go back to home' : 'Refresh'}
+                {isRouteError(error) ? t('Go back to home') : t('Refresh')}
             </Button>
         </Stack>
     )

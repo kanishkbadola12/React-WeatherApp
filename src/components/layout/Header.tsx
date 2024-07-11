@@ -14,7 +14,8 @@ export const Header: React.FC = () => {
             justifyContent={isXs ? "center" : "space-between"}
             alignItems={isXs ? "center" : "start"}
             gap={isXs ? 1.5 : 0}
-            height="4rem"
+            height="12vh"
+            mb={isXs ? 4 : 0}
         >
             <Navigation />
             <Search />

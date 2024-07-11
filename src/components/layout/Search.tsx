@@ -1,25 +1,30 @@
 import { useEffect, useRef, useState } from "react";
 import { useLazyGetCoordinatesQuery } from "../../services/coordinatesApi";
-import { useAppDispatch } from '../../hooks/redux';
-import { setCoordinates } from "../../store/slices/coordinates";
+import { useAppDispatch } from '../../hooks/useRedux';
 import { InputAdornment, TextField } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from "react-i18next";
+import { setAppHasError, setCurrentLocale, setErrorText, setIsAppLoading, setLoadingText } from "../../store/slices/appState";
+import { setCoordinates } from "../../store/slices/coordinates";
 import { useLazyGetGeoLocationQuery } from "../../services/geoLocationApi";
-import { setCurrentLocale } from "../../store/slices/appState";
 
 export const Search: React.FC = () => {
     const [
         getCoordinates,
         {
             data: coordinates,
-            isError: CoordinatesHasError,
+            isFetching: isCoordinatesFetching,
+            isError: coordinatesHasError,
+            error: coordinateError
         }
     ] = useLazyGetCoordinatesQuery();
     const [
         getLocation,
         {
-            data: geoLocation
+            data: location,
+            isFetching: isLocationFetching,
+            isError: locationHasError,
+            error: locationError
         }
     ] = useLazyGetGeoLocationQuery();
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -27,6 +32,32 @@ export const Search: React.FC = () => {
     const [helperText, setHelperText] = useState<string>('');
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
+
+    useEffect(() => {
+        if (coordinates) {
+            if (coordinates.latitude !== null && coordinates.longitude !== null) {
+                dispatch(setCoordinates(coordinates));
+                getLocation(coordinates);
+            } else {
+                setSearchHasError(true);
+                setHelperText('Please enter a valid location.');
+            }
+        }
+        if (location) {
+            dispatch(setCurrentLocale(location.country_code));
+        }
+    }, [coordinates, location]);
+
+    useEffect(() => {
+        dispatch(setIsAppLoading(isCoordinatesFetching || isLocationFetching));
+        dispatch(setLoadingText("Fetching location's weather"));
+    }, [isCoordinatesFetching, isLocationFetching]);
+
+    useEffect(() => {
+        dispatch(setAppHasError(coordinatesHasError || locationHasError));
+        dispatch(setErrorText(coordinateError || locationError || ''));
+    }, [isCoordinatesFetching || locationHasError]);
+
 
     const validateSearch = () => {
         if (inputRef.current) {
@@ -63,22 +94,6 @@ export const Search: React.FC = () => {
             getCoordinates(inputRef.current.value);
         }
     };
-
-    useEffect(() => {
-        if (coordinates) {
-            const { latitude, longitude } = coordinates;
-
-            if ((latitude === null && longitude === null) || CoordinatesHasError) {
-                setHelperText('Please enter a valid location.');
-                setSearchHasError(true);
-                return;
-            }
-
-            dispatch(setCoordinates({ latitude, longitude }));
-            getLocation(coordinates);
-            dispatch(setCurrentLocale(geoLocation?.country_code || "en"))
-        }
-    }, [coordinates, geoLocation]);
 
     return (
         <TextField

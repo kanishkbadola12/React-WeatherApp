@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
-import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { useEffect } from "react";
+import { Stack, useMediaQuery, useTheme } from "@mui/material";
 import DailyForecast from "../components/daily-forecast/DailyForecast";
 import DailyForecastSummary from "../components/daily-forecast/DailySummary";
-import HourlyForecast from "../components/daily-forecast/HourlyForecast";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import HourlyForecast from "../components/hourly-forecast/HourlyForecast";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
 import { useLazyGetGeoLocationQuery } from "../services/geoLocationApi";
-import { LoadingIndicator } from "../components/ui/LoadingIndicator";
-import { Error } from "../components/ui/Error";
-import { setAppHasError, setIsAppLoading, setSelectedTab } from "../store/slices/appState";
-import { useTranslation } from "react-i18next";
+import { setAppHasError, setErrorText, setIsAppLoading, setLoadingText, setSelectedTab } from "../store/slices/appState";
 
 const Daily: React.FC = () => {
   const [
@@ -25,22 +22,19 @@ const Daily: React.FC = () => {
   const [
     getLocation,
     {
-      data: geoLocation,
+      data: location,
       isFetching: isLocationFetching,
       isError: locationHasError,
       error: locationError
     }
   ] = useLazyGetGeoLocationQuery();
-  const [isComponentLoading, setIsComponentLoading] = useState(true);
-  const { isAppLoading, appHasErrors } = useAppSelector((state: RootState) => state.appState);
   const coordinates = useAppSelector((state: RootState) => state.coordinates);
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down('md'));
-  const isXs = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
 
   useEffect(() => {
+    dispatch(setSelectedTab('today'));
     if (coordinates.latitude != null && coordinates.longitude != null) {
       console.log(coordinates);
       getForecast(coordinates);
@@ -49,37 +43,19 @@ const Daily: React.FC = () => {
   }, [coordinates]);
 
   useEffect(() => {
-    if (isForecastFetching && isLocationFetching) {
-      setIsComponentLoading(false);
-    }
-    if (!isForecastFetching && !isLocationFetching && !isComponentLoading) {
-      dispatch(setIsAppLoading(false));
-      dispatch(setSelectedTab('today'));
-    }
-  }, [isForecastFetching, isLocationFetching, isComponentLoading]);
+    dispatch(setIsAppLoading(isForecastFetching || isLocationFetching));
+    dispatch(setLoadingText('Loading Daily Weather Data'));
+  }, [isForecastFetching, isLocationFetching]);
 
   useEffect(() => {
-    if (forecastHasError || locationHasError) {
-      dispatch(setAppHasError(true));
-    }
+    dispatch(setAppHasError(forecastHasError || locationHasError));
+    dispatch(setErrorText(locationError || forecastError || ''));
   }, [forecastHasError, locationHasError]);
 
-  if (isAppLoading) {
-    return (
-      <LoadingIndicator>
-        <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">{t('Loading Daily Weather Data')}</Typography>
-      </LoadingIndicator>
-    )
-  }
-
-  if (appHasErrors) {
-    return <Error error={locationError || forecastError} />
-  }
-
   return (
-    weather && geoLocation &&
-    <Stack gap={6}>
-      <Stack direction={isMd ? "column" : "row"} gap={7}>
+    weather && location &&
+    <Stack gap={4}>
+      <Stack direction={isMd ? "column" : "row"} gap={4}>
         <DailyForecast
           currentTemperature={weather.currentTemperature}
           date={weather.date}
@@ -95,8 +71,8 @@ const Daily: React.FC = () => {
         />
       </Stack>
       <DailyForecastSummary
-        city={geoLocation.city}
-        countryCode={geoLocation.country_code.toUpperCase()}
+        city={location.city}
+        countryCode={location.country_code.toUpperCase()}
         rain={weather.rain}
         windSpeed={weather.windSpeed}
         feelsLike={weather.feelsLike}

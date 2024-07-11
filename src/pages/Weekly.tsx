@@ -1,15 +1,12 @@
-import { useEffect, useState } from "react";
-import { Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useEffect } from "react";
+import { Stack } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { RootState } from "../store/store";
 import { useLazyGetForecastQuery } from "../services/forecastApi";
 import { WeeklyForecast } from "../components/weekly-forecast/WeeklyForecast";
 import { Highlights } from "../components/weekly-forecast/Highlights";
 import { useLazyGetAirQualityQuery } from "../services/airQualityApi";
-import { LoadingIndicator } from "../components/ui/LoadingIndicator";
-import { Error } from "../components/ui/Error";
-import { setAppHasError, setIsAppLoading, setSelectedTab } from "../store/slices/appState";
-import { useTranslation } from "react-i18next";
+import { setAppHasError, setErrorText, setIsAppLoading, setLoadingText, setSelectedTab } from "../store/slices/appState";
 
 const Weekly: React.FC = () => {
     const [
@@ -30,15 +27,11 @@ const Weekly: React.FC = () => {
             error: aqiError
         }
     ] = useLazyGetAirQualityQuery();
-    const [isComponentLoading, setIsComponentLoading] = useState(true);
-    const { isAppLoading, appHasErrors } = useAppSelector((state: RootState) => state.appState);
-    const theme = useTheme();
-    const isXs = useMediaQuery(theme.breakpoints.down('xs'));
     const coordinates = useAppSelector((state: RootState) => state.coordinates);
     const dispatch = useAppDispatch();
-    const { t } = useTranslation();
 
     useEffect(() => {
+        dispatch(setSelectedTab('week'));
         if (coordinates.latitude != null && coordinates.longitude != null) {
             console.log(coordinates);
             getForecast(coordinates);
@@ -47,32 +40,14 @@ const Weekly: React.FC = () => {
     }, [coordinates]);
 
     useEffect(() => {
-        if (isForecastFetching && isAqiFetching) {
-            setIsComponentLoading(false);
-        }
-        if (!isForecastFetching && !isAqiFetching && !isComponentLoading) {
-            dispatch(setIsAppLoading(false));
-            dispatch(setSelectedTab('week'));
-        }
-    }, [isForecastFetching, isAqiFetching, isComponentLoading]);
+        dispatch(setIsAppLoading(isForecastFetching || isAqiFetching));
+        dispatch(setLoadingText('Loading Weekly Weather Data'));
+    }, [isForecastFetching, isAqiFetching]);
 
     useEffect(() => {
-        if (forecastHasError || aqiHasError) {
-            dispatch(setAppHasError(true));
-        }
+        dispatch(setAppHasError(forecastHasError || aqiHasError));
+        dispatch(setErrorText(forecastError || aqiError || ''));
     }, [forecastHasError, aqiHasError]);
-
-    if (isAppLoading) {
-        return (
-            <LoadingIndicator>
-                <Typography variant={isXs ? "caption" : "overline"} color="textSecondary">{t('Loading Weekly Weather Data')}</Typography>
-            </LoadingIndicator>
-        )
-    }
-
-    if (appHasErrors) {
-        return <Error error={forecastError || aqiError} />
-    }
 
     return (weather && aqi &&
         <Stack mt={2} gap={6}>

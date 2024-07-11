@@ -30,7 +30,7 @@ export const DailyForecastSummary: React.FC<DailyForecastSummaryProps> = ({
 
     return (
         <Box>
-            <Stack spacing={2} alignItems={isSm ? "center" : "start"}>
+            <Stack ml="-6px" spacing={2} alignItems={isSm ? "center" : "start"}>
                 <Box
                     display="flex"
                     alignItems="center"

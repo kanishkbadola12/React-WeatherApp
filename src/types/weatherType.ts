@@ -1,3 +1,6 @@
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import { SerializedError } from "@reduxjs/toolkit/react";
+
 type NoRain = 'No rain & Clear' | 'No rain & Partly Cloudy' | 'No rain & Mostly Cloudy' | 'No rain & Overcast';
 type LightRain = 'Light rain & Clear' | 'Light rain & Partly Cloudy' | 'Light rain & Mostly Cloudy' | 'Light rain & Overcast';
 type ModerateRain = 'Moderate rain & Clear' | 'Moderate rain & Partly Cloudy' | 'Moderate rain & Mostly Cloudy' | 'Moderate rain & Overcast';
@@ -5,10 +8,20 @@ type HeavyRain = 'Heavy rain & Clear' | 'Heavy rain & Partly Cloudy' | 'Heavy ra
 
 export type WeatherState = NoRain | LightRain | ModerateRain | HeavyRain;
 export type WeatherFactors = 'AQI' | 'UV Index' | 'Wind Speed' | 'Humidity' | 'Visibility';
+export type errorType = FetchBaseQueryError | SerializedError | string;
 
 export interface Coordinates {
     latitude: number | null;
     longitude: number | null;
+}
+
+export interface AppState {
+    isAppLoading: boolean,
+    loadingText: string,
+    appHasError: boolean,
+    errorText: errorType,
+    selectedTab: string,
+    currentLocale: string
 }
 
 export interface WeeklyConditions {

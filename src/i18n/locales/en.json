@@ -37,5 +37,11 @@
     "UV Index": "UV Index",
     "Wind Speed": "Wind Speed",
     "Visibility": "Visibility",
-    "Sunrise & Sunset": "Sunrise & Sunset"
+    "Sunrise & Sunset": "Sunrise & Sunset",
+    "Fetching Location": "Fetching Location...",
+    "Network error: Failed to fetch.": "Network error: Failed to fetch.",
+    "Unknown Error": "Unknown Error",
+    "Oh snap! 404": "Oh snap! 404...",
+    "Go back to home": "Go back to home",
+    "Refresh": "Refresh"
 }
