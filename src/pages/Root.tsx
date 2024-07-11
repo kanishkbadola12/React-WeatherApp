@@ -14,7 +14,6 @@ import { setAppHasError, setErrorText, setIsAppLoading, setLoadingText } from ".
 const RootLayout = () => {
     const dispatch = useAppDispatch();
     const theme = useTheme();
-    const isSm = useMediaQuery(theme.breakpoints.down('sm'));
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
     const { t } = useTranslation();
     const { isAppLoading, loadingText, appHasError, errorText } = useAppSelector((state: RootState) => state.appState);
